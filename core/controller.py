@@ -1,8 +1,16 @@
-# functions serve player action
+# functions serving players' action
 
 
 def pressed_start(table, player):
+    """
+        serves action start
+    :param table: Table
+    :param player: Player
+    :return: nothing
+    """
     if not can_start(table, player):
+        print player.name + ' cannot start'
+        pressed_leave(table, player)
         return
 
     player.ready = True
@@ -14,18 +22,31 @@ def pressed_start(table, player):
 
 
 def pressed_leave(table, player):
+    """
+        serves action leave
+    :param table: Table
+    :param player: Player
+    :return: nothing
+    """
     if not table.started:
         table.remove_player(player)
     else:
         player.leaving = True
         pressed_fold(table, player)
-        table.notify_players()
+        # no need to send notification - already sent in pressed_fold
     print 'Player ' + player.name + ' has left'
 
 
 def pressed_check(table, player):
+    """
+        serves action check
+    :param table: Table
+    :param player: Player
+    :return: nothing
+    """
     if not can_check(table, player):
-        print player.name + ' connot check'
+        print player.name + ' cannot check'
+        pressed_leave(table, player)
         return
     print player.name + ' checks'
     table.game.next_player_turn()
@@ -33,8 +54,16 @@ def pressed_check(table, player):
 
 
 def pressed_bet(table, player, value):
+    """
+        serves action get
+    :param table: Table
+    :param player: Player
+    :param value: integer
+    :return: nothing
+    """
     if not can_bet(table, player, value):
-        print player.name + ' connot bets'
+        print player.name + ' cannot bets'
+        pressed_leave(table, player)
         return
     print player.name + ' bets'
     player.add_to_pot(value)
@@ -43,8 +72,15 @@ def pressed_bet(table, player, value):
 
 
 def pressed_call(table, player):
+    """
+        serves action call
+    :param table: Table
+    :param player: Player
+    :return: nothing
+    """
     if not can_call(table, player):
         print player.name + ' cannot calls'
+        pressed_leave(table, player)
         return
     print player.name + ' calls'
     player.add_to_pot(table.game.max_contribution() - player.contribution)
@@ -53,8 +89,16 @@ def pressed_call(table, player):
 
 
 def pressed_raise(table, player, value):
+    """
+        serves action raise
+    :param table: Table
+    :param player: Player
+    :param value: integer
+    :return: nothing
+    """
     if not can_raise(table, player, value):
         print player.name + ' cannot raises'
+        pressed_leave(table, player)
         return
     print player.name + ' raises'
     player.add_to_pot(table.game.max_contribution() - player.contribution + value)
@@ -63,17 +107,25 @@ def pressed_raise(table, player, value):
 
 
 def pressed_fold(table, player):
+    """
+        serves action fold
+    :param table: Table
+    :param player: Player
+    :return: nothing
+    """
     if not can_fold(table, player):
         print player.name + ' cannot fold'
         return
     print player.name + ' folds'
     player.fold = True
-    table.game.players_visited -= 1
+    table.game.visited_players -= 1
     table.game.next_player_turn()
     table.notify_players()
 
-
+#
 # functions checking if action is available for player
+#
+
 
 def can_start(table, player):
     """
@@ -187,7 +239,10 @@ class Controller:
                 self.event[data](self.table, player)
         except KeyError:
             print 'Improper input from player \'' + player.name + '\''
+            pressed_leave(self.table, player)
         except ValueError:
             print 'Improper input argument from player \'' + player.name + '\''
+            pressed_leave(self.table, player)
         except TypeError:
             print 'Improper number of arguments from player \'' + player.name + '\''
+            pressed_leave(self.table, player)
