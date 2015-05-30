@@ -11,7 +11,7 @@ class Server:
 
     def __init__(self):
         self.host = ''
-        self.port = 30009
+        self.port = 10000
         self.backlog = 5
         self.server = None
         self.tables = []
@@ -89,8 +89,13 @@ class Server:
             method deletes tables on which game has ended and all players have left
         :return: nothing
         """
-        for table in self.tables:
+        i = 0
+        while i < len(self.tables):
+            table = self.tables[i]
+            i += 1
             if table.is_empty() and table.started:
                 table.join()
                 self.tables.remove(table)
+                i -= 1
                 print 'Empty table removed'
+
