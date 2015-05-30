@@ -1,3 +1,4 @@
+import calculations.pokerCalculations
 import core.controller as controller
 from deck import Deck
 
@@ -89,8 +90,14 @@ class Game:
         self.set_turn_after_auction()
 
     def auction_end(self):
-        if self.auction_participants() <= 1:
+        if self.auction_participants() == 0:
             return True
+        elif self.auction_participants() == 1:
+            for player in self.table.players:
+                if not player.fold and not player.is_allin() and player.contribution == self.max_contribution():
+                    return True
+                else:
+                    return False
 
         if self.visited_players >= self.active_players():
             for player in self.table.players:
@@ -146,12 +153,32 @@ class Game:
         else:
             winners_contribution = self.__count_winners_contribution(winners)
             for winner in winners:
-                winner.chips += winners_contribution / len(winners)
+                winner.chips += self.pot() * winner.contribution / winners_contribution
         self.__reset_contributions()
 
     def find_winner(self):
-         # return calc.find_winner(self.table.players)
-        return [self.table.players[0]]
+        players_and_theirs_cards = []
+        for player in self.table.players:
+            if not player.fold:
+                player_cards = []
+                player_cards.extend(player.get_cards())
+                player_cards.extend(self.tableCards)
+                players_and_theirs_cards.append((player, player_cards))
+
+        if len(players_and_theirs_cards) == 0:
+            raise Exception('No players compete')
+
+        players_and_theirs_cards.sort(calculations.pokerCalculations.compare_cards, key=lambda pair: pair[1])
+        winners = []
+        for player_and_cards in players_and_theirs_cards:
+            if calculations.pokerCalculations.compare_cards(players_and_theirs_cards[0][1], player_and_cards[1]) == 0:
+                winners.append(player_and_cards[0])
+            else:
+                break
+
+        for player in winners:
+            print player.name
+        return winners
 
     def prepare_next_round(self):
         self.round += 1
@@ -221,7 +248,7 @@ class Game:
     def next_player_turn(self):
         player_with_turn = self.__get_player_with_turn()
         player_with_turn.turn = False
-        if self.active_players() == 1:
+        if self.auction_participants() == 0:
             return
 
         index = self.table.players.index(player_with_turn)

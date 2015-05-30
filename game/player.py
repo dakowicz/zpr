@@ -76,9 +76,6 @@ class Player:
         """
         return self.hand.return_cards()
 
-    # def hand(self, table_cards):
-    #    return calculations.best_hand(self.hand, table_cards)
-
     def set_card(self, card):
         """
             adds card to player hand
@@ -86,6 +83,13 @@ class Player:
         :return: nothing
         """
         self.hand.set_card(card)
+
+    def get_cards(self):
+        """
+            returns players hand (two cards)
+        :return: list of Cards
+        """
+        return [self.hand.firstCard, self.hand.secondCard]
 
     def info(self):
         """
