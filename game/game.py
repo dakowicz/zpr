@@ -90,8 +90,8 @@ class Game:
             input_ready = player.get_ready_input_socket(timeout)
 
             if len(input_ready) == 0:
-                print player.name + ' waited too long'
-                controller.pressed_leave(self, player)
+                print 'Player ' + player.name + ' removed - waited too long.'
+                controller.pressed_leave(self.table, player)
             else:
                 message = player.get_input()
                 self.table.controller.serve_event(player, message['content'])

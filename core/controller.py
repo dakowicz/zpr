@@ -1,6 +1,20 @@
 # functions serving players' action
 
 
+def can_start_game(table):
+    """
+        checks if all conditions are met to start a game
+    :param table: Table
+    :return: boolean
+    """
+    if len(table.players) < table.PLAYERS_MINIMUM:
+        return False
+    for player in table.players:
+        if not player.ready:
+            return False
+    return True
+
+
 def pressed_start(table, player):
     """
         serves action start
@@ -14,12 +28,6 @@ def pressed_start(table, player):
 
     player.ready = True
     table.notify_players()
-    if len(table.players) < table.PLAYERS_MINIMUM:
-        return
-    for player in table.players:
-        if not player.ready:
-            return
-    table.started = True
 
 
 def pressed_leave(table, player):

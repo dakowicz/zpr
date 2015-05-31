@@ -2,6 +2,7 @@ import json
 import game
 import hand
 import select
+import time
 from core.server import Server
 
 
@@ -17,6 +18,7 @@ class Player:
         self.ready = False
         self.leaving = False
         self.turn = False
+        self.arrival_time = time.time()
 
     def get_input(self):
         """

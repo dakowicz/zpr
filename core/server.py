@@ -11,7 +11,7 @@ class Server:
 
     def __init__(self):
         self.host = ''
-        self.port = 10000
+        self.port = 20000
         self.backlog = 5
         self.server = None
         self.tables = []
