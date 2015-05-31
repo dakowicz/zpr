@@ -1,0 +1,306 @@
+/* CSS for whole table interface:
+ * table, players (with names, cards and stack),
+ * dealer's cards on the center
+ *
+ * this scheme was tested on 1920x1080 resolution
+ */
+
+body{
+  background-image: url(../components/images/background.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-color: #111111;
+}
+
+.poker_table {
+  background-image: url(../components/images/table.png);
+  background-repeat: no-repeat;
+  width: 800px;
+  height: 500px;
+}
+
+.seat {
+  width:150px;
+  height:150px;
+  position: absolute;
+}
+
+.dealer_button {
+  background-image: url(../components/images/dealerbutton.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width:24px;
+  height:19px;
+  position: absolute;
+  left: 130px;
+  top: 25px;
+}
+
+.small_blind_button {
+  background-image: url(../components/images/dealerbutton.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width:24px;
+  height:19px;
+  position: absolute;
+  left: 105px;
+  top: 25px;
+}
+
+.small_blind_button {
+  background-image: url(../components/images/dealerbutton.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width:24px;
+  height:19px;
+  position: absolute;
+  left: 105px;
+  top: 25px;
+}
+
+
+.player_data {
+  background-color:gray;
+  width:120px;
+  height:33px;
+  font-size: 14px;
+  color:white;
+  text-align: center;
+  top:50px;
+  position:absolute;
+  border-radius: 2px;
+}
+
+.player_name {
+  width:100%;
+}
+
+.chips {
+}
+
+.card {
+  width:50px;
+  height:73px;
+  background-size: 100%;
+  cursor: pointer;
+}
+
+.player_cards {
+  width:102px;
+  height:73px;
+  float:left;
+  position:absolute;
+  left:10px;
+  top:0;
+}
+
+.player_cards_first {
+  position:absolute;
+  left:0;
+  top:0;
+  background-image: url(../components/images/playing-card-back.png);
+  background-size: 100%;
+}
+
+.player_cards_second {
+  position:absolute;
+  left:50px;
+  top:0;
+  background-image: url(../components/images/playing-card-back.png);
+  background-size: 100%;
+}
+
+.bet {
+  font-size: 12px;
+  color:white;
+  position: absolute;
+  left:0;
+  top:0;
+}
+
+#seat1 {
+  left:500px;
+  top:10px;
+}
+.seat1_dealer_button {
+  left:505px;
+  top:80px;
+}
+#seat1 .bet {
+  left:30px;
+  top:125px;
+}
+
+#seat2 {
+  left:650px;
+  top:165px;
+}
+
+#seat2 .bet {
+  left:-50px;
+  top:75px;
+}
+
+#seat3 {
+  left:500px;
+  top:340px;
+}
+
+#seat3 .bet {
+  left:30px;
+  top:-20px;
+}
+
+#seat4 {
+  left:150px;
+  top:340px;
+}
+#seat4 .bet {
+  left:80px;
+  top:-20px;
+}
+
+#seat5 {
+  left:0px;
+  top:165px;
+}
+
+#seat5 .bet {
+  left:155px;
+  top:75px;
+}
+
+#seat6 {
+  left:150px;
+  top:10px;
+}
+
+#seat6 .bet {
+  left:80px;
+  top:125px;
+}
+
+#board {
+  position: absolute;
+  left:250px;
+  top:168px;
+}
+
+#pot {
+  position: absolute;
+  left:325px;
+  top:245px;
+  font-size: 12px;
+  color:white;
+  text-align: center;
+}
+
+.boardcard {
+  width:50px;
+  height:73px;
+  position: absolute;
+  background-image: url(../components/images/cards/ace_of_clubs.png);
+  left:0;
+  top:0;
+  cursor: auto;
+}
+
+#flop1 {
+}
+
+#flop2 {
+  left:52px;
+}
+
+#flop3 {
+  left:104px;
+}
+
+#turn {
+  left:156px;
+}
+
+#river {
+  left:208px;
+}
+
+#action_options {
+  width:800px;
+  height:400px;
+  position: absolute;
+  left:400px;
+  top:500px;
+}
+
+#game_options{
+  width:300px;
+  height:200px;
+  position: absolute;
+  left:150px;
+  top:500px;
+}
+
+.action_button {
+  background-color: gray;
+  position: absolute;
+  color: white;
+  border-radius: 2px;
+  height:30px;
+  padding: 10px 5px 0 5px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#game_timer {
+  position: absolute;
+  color: black;
+  border-radius: 1px;
+  height:30px;
+  font-size: 12px;
+  text-align: center;
+  width:90px;
+  left:350px;
+  top:440px;
+}
+
+.timer_normal {
+  background-color: limegreen;
+}
+
+#fold_button {
+}
+
+#call_button {
+  left:53px;
+}
+
+#raise_button {
+  left:102px;
+}
+
+#sit_button {
+}
+
+#stand_button {
+  left: 40px;
+}
+
+#ready_button {
+  left: 105px;
+}
+
+#chat_and_game_history {
+  position:absolute;
+  width:400px;
+  height: 600px;
+  border-color: black;
+  border-style: solid;
+  opacity: 0.5;
+  border-width: 1px;
+  border-radius: 2px;
+  font-size: 10px;
+  left:900px;
+  top:5px;
+}
