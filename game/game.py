@@ -5,7 +5,7 @@ from deck import Deck
 
 class Game:
     """
-        class implements game logic
+        class implements game logic.
     """
     STARTING_SMALL_BLIND = 1
     STARTING_BIG_BLIND = 2
@@ -22,6 +22,10 @@ class Game:
         self.round = 0
 
     def game_loop(self):
+        """
+            game main loop, ends if only one player left
+        :return: nothing
+        """
         self.start()
         while len(self.table.players) > 1:
             self.distribute_cards()
@@ -39,15 +43,27 @@ class Game:
             self.table.notify_players()
 
     def start(self):
+        """
+            does all things necessary before game
+        :return: nothing
+        """
         self.dealer = self.table.players[0]
         print 'Game started'
         self.prepare_next_round()
 
     def distribute_cards(self):
-        self.__distribute_players_one_card(self.dealer)
-        self.__distribute_players_one_card(self.dealer)
+        """
+            distributes two cards to all players
+        :return: nothing
+        """
+        self.__distribute_players_one_card()
+        self.__distribute_players_one_card()
 
     def set_blinds(self):
+        """
+            increases blinds if necessary and sets players' contributions if are on blinds
+        :return: nothing
+        """
         dealer_index = self.table.players.index(self.dealer)
         players_number = len(self.table.players)
         if self.round % 5 == 0:
@@ -61,45 +77,43 @@ class Game:
             self.table.players[(dealer_index + 2) % players_number].add_to_pot(self.bigBlind)
 
     def auction(self):
+        """
+            auction loop - listen for players input and drop them out if they exceeded timeout
+        :return: nothing
+        """
         self.visited_players = 0
-        while not self.auction_end():
+        while not self.is_auction_finished():
             self.visited_players += 1
             player = self.__get_player_with_turn()
-            if player.leaving:
-                controller.pressed_fold(self, player)
-                continue
-            if player.fold:
-                self.visited_players -= 1
-                self.next_player_turn()
-                continue
-            if player.is_allin():
-                self.next_player_turn()
-                continue
 
-            timeout = 1120.0
+            timeout = 150.0
             input_ready = player.get_ready_input_socket(timeout)
 
             if len(input_ready) == 0:
                 print player.name + ' waited too long'
                 controller.pressed_leave(self, player)
-                continue
-
-            message = player.get_input()
-            self.table.controller.serve_event(player, message['content'])
+            else:
+                message = player.get_input()
+                self.table.controller.serve_event(player, message['content'])
 
         self.set_turn_after_auction()
 
-    def auction_end(self):
-        if self.auction_participants() == 0:
+    def is_auction_finished(self):
+        """
+            checks if auction should be finished
+        :return: boolean
+        """
+        if self.not_folded_and_not_allin_players() == 0:
             return True
-        elif self.auction_participants() == 1:
+        elif self.not_folded_and_not_allin_players() == 1:
             for player in self.table.players:
-                if not player.fold and not player.is_allin() and player.contribution == self.max_contribution():
-                    return True
-                else:
-                    return False
+                if not player.fold and not player.is_allin():
+                    if player.contribution == self.max_contribution():
+                        return True
+                    else:
+                        return False
 
-        if self.visited_players >= self.active_players():
+        if self.visited_players >= self.not_folded_players():
             for player in self.table.players:
                 if not player.fold and player.contribution != self.max_contribution():
                     return False
@@ -108,45 +122,76 @@ class Game:
             return False
 
     def set_turn_after_auction(self):
-        for player in self.table.players:
-            player.turn = False
+        """
+            set turn to player after dealer
+        :return: nothing
+        """
+        self.__reset_turn()
         self.dealer.turn = True
         self.next_player_turn()
 
-    def auction_participants(self):
-        auction_participants_number = 0
+    def not_folded_and_not_allin_players(self):
+        """
+            returns number of players who has not folded and are not all in
+        :return: integer
+        """
+        result = 0
         for player in self.table.players:
             if not player.fold and not player.is_allin():
-                auction_participants_number += 1
-        return auction_participants_number
+                result += 1
+        return result
 
-    def active_players(self):
-        active_players_number = 0
+    def not_folded_players(self):
+        """
+            returns number of players who has not folded
+        :return: integer
+        """
+        result = 0
         for player in self.table.players:
             if not player.fold:
-                active_players_number += 1
-        return active_players_number
+                result += 1
+        return result
 
     def flop(self):
+        """
+            sets first three table cards
+        :return: nothing
+        """
         for i in range(3):
             self.tableCards.append(self.deck.get_card())
         self.table.notify_players()
 
     def turn(self):
+        """
+            sets fourth table card
+        :return: nothing
+        """
         self.tableCards.append(self.deck.get_card())
         self.table.notify_players()
 
     def river(self):
+        """
+            sets fifth table card
+        :return: nothing
+        """
         self.tableCards.append(self.deck.get_card())
         self.table.notify_players()
 
     def pot(self):
+        """
+            returns sum of all players contribution
+        :return: integer
+        """
         pot = 0
         for player in self.table.players:
             pot += player.contribution
         return pot
 
     def deal_win(self):
+        """
+            finds winners in a round and sets theirs win
+        :return: nothing
+        """
         winners = self.find_winner()
         if len(winners) == 1:
             winners[0].chips += self.pot()
@@ -157,6 +202,10 @@ class Game:
         self.__reset_contributions()
 
     def find_winner(self):
+        """
+            finds winners in a round, uses C++ function to compare cards
+        :return: list of Players
+        """
         players_and_theirs_cards = []
         for player in self.table.players:
             if not player.fold:
@@ -181,6 +230,10 @@ class Game:
         return winners
 
     def prepare_next_round(self):
+        """
+            does all necessary things before next round
+        :return: nothing
+        """
         self.round += 1
         self.__reset_fold()
         self.collect_cards()
@@ -191,6 +244,11 @@ class Game:
         self.set_player_turn()
 
     def collect_cards(self, player=None):
+        """
+            collects cards from player or table and players and add them to the deck
+        :param player: Player (default = None)
+        :return: nothing
+        """
         if player:
             self.__return_cards(player)
         else:
@@ -201,12 +259,20 @@ class Game:
                 self.__return_cards(player)
 
     def change_dealer(self):
+        """
+            set next player as a dealer
+        :return: nothing
+        """
         players_number = len(self.table.players)
         dealer_index = self.table.players.index(self.dealer)
         self.dealer = self.table.players[(dealer_index + 1) % players_number]
         self.set_player_turn()
 
     def delete_leaving_players(self):
+        """
+            removes all players, who decided to leave, from table
+        :return: nothing
+        """
         i = 0
         while i < len(self.table.players):
             player = self.table.players[i]
@@ -218,6 +284,10 @@ class Game:
                 i -= 1
 
     def delete_losers(self):
+        """
+            removes all players, who have lost, from table
+        :return: nothing
+        """
         i = 0
         while i < len(self.table.players):
             player = self.table.players[i]
@@ -229,26 +299,37 @@ class Game:
                 i -= 1
 
     def set_player_turn(self):
+        """
+            sets player turn from which round will start
+        :return: nothing
+        """
         players_number = len(self.table.players)
         dealer_index = self.table.players.index(self.dealer)
-        for player in self.table.players:
-            player.turn = False
+        self.__reset_turn()
         if players_number == 2:
             self.table.players[dealer_index].turn = True
         else:
             self.table.players[(dealer_index + 3) % players_number].turn = True
 
     def max_contribution(self):
-        biggest_contribution = self.bigBlind
+        """
+            returns the biggest player contribution
+        :return: integer
+        """
+        biggest_contribution = 0
         for player in self.table.players:
             if player.contribution > biggest_contribution:
                 biggest_contribution = player.contribution
         return biggest_contribution
 
     def next_player_turn(self):
+        """
+            sets next player turn
+        :return: nothing
+        """
         player_with_turn = self.__get_player_with_turn()
         player_with_turn.turn = False
-        if self.auction_participants() == 0:
+        if self.not_folded_and_not_allin_players() == 0:
             return
 
         index = self.table.players.index(player_with_turn)
@@ -258,33 +339,67 @@ class Game:
             self.next_player_turn()
 
     def __get_player_with_turn(self):
+        """
+            returns player with turn, raises exception if such does not exist
+        :raise: Exception
+        :return: Player
+        """
         for player in self.table.players:
             if player.turn:
                 return player
         raise Exception('None player has turn')
 
+    def __reset_turn(self):
+        """
+            sets turn as False to all players
+        :return: nothing
+        """
+        for player in self.table.players:
+            player.turn = False
+
     def __reset_fold(self):
+        """
+            sets fold as False to all players
+        :return: nothing
+        """
         for player in self.table.players:
             player.fold = False
 
     def __reset_contributions(self):
+        """
+            sets contribution as 0 to all players
+        :return: nothing
+        """
         for player in self.table.players:
             player.contribution = 0
 
     def __count_winners_contribution(self, winners):
+        """
+            returns sum of given players contributions
+        :param winners: list of Players
+        :return: integer
+        """
         winners_contribution = 0
         for winner in winners:
             winners_contribution += winner.contribution
         return winners_contribution
 
-    def __distribute_players_one_card(self, dealer):
-        dealer_index = self.table.players.index(dealer)
+    def __distribute_players_one_card(self):
+        """
+            distribute all players one card
+        :return: nothing
+        """
+        dealer_index = self.table.players.index(self.dealer)
         for player in self.table.players[dealer_index + 1: len(self.table.players)]:
             player.set_card(self.deck.get_card())
         for player in self.table.players[0: dealer_index + 1]:
             player.set_card(self.deck.get_card())
 
     def __return_cards(self, player):
+        """
+            collects cards from given player and add them to the deck
+        :return: nothing
+        """
         first_card, second_card = player.return_cards()
         if first_card is not None:
             self.deck.collect_card(first_card)

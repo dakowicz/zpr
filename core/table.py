@@ -9,10 +9,9 @@ from game.game import Game
 class Table(threading.Thread):
     """
         class responsible for adding, removing players at table
-        implements connection between players and game
         implements observer pattern
     """
-    PLAYERS_LIMIT = 3
+    PLAYERS_LIMIT = 8
     PLAYERS_MINIMUM = 2
 
     def __init__(self):

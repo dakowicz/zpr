@@ -30,7 +30,7 @@ class Handler(threading.Thread):
                 print response['dealer']
 
 host = 'localhost'
-port = 30009
+port = 10000
 size = 1024
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

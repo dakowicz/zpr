@@ -9,12 +9,13 @@ def pressed_start(table, player):
     :return: nothing
     """
     if not can_start(table, player):
-        print player.name + ' cannot start'
         pressed_leave(table, player)
         return
 
     player.ready = True
     table.notify_players()
+    if len(table.players) < table.PLAYERS_MINIMUM:
+        return
     for player in table.players:
         if not player.ready:
             return
@@ -45,10 +46,8 @@ def pressed_check(table, player):
     :return: nothing
     """
     if not can_check(table, player):
-        print player.name + ' cannot check'
         pressed_leave(table, player)
         return
-    print player.name + ' checks'
     table.game.next_player_turn()
     table.notify_players()
 
@@ -62,10 +61,8 @@ def pressed_bet(table, player, value):
     :return: nothing
     """
     if not can_bet(table, player, value):
-        print player.name + ' cannot bets'
         pressed_leave(table, player)
         return
-    print player.name + ' bets'
     player.add_to_pot(value)
     table.game.next_player_turn()
     table.notify_players()
@@ -79,10 +76,8 @@ def pressed_call(table, player):
     :return: nothing
     """
     if not can_call(table, player):
-        print player.name + ' cannot calls'
         pressed_leave(table, player)
         return
-    print player.name + ' calls'
     player.add_to_pot(table.game.max_contribution() - player.contribution)
     table.game.next_player_turn()
     table.notify_players()
@@ -97,10 +92,8 @@ def pressed_raise(table, player, value):
     :return: nothing
     """
     if not can_raise(table, player, value):
-        print player.name + ' cannot raises'
         pressed_leave(table, player)
         return
-    print player.name + ' raises'
     player.add_to_pot(table.game.max_contribution() - player.contribution + value)
     table.game.next_player_turn()
     table.notify_players()
@@ -114,9 +107,7 @@ def pressed_fold(table, player):
     :return: nothing
     """
     if not can_fold(table, player):
-        print player.name + ' cannot fold'
         return
-    print player.name + ' folds'
     player.fold = True
     table.game.visited_players -= 1
     table.game.next_player_turn()
@@ -134,7 +125,7 @@ def can_start(table, player):
     :param player: Player
     :return: boolean
     """
-    if table.started or player.ready or len(table.players) < table.PLAYERS_MINIMUM:
+    if table.started or player.ready:
         return False
     else:
         return True
