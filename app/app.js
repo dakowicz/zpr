@@ -70,17 +70,17 @@ angular.module('PokerMain', [
             status: false
             };
         $scope.call = {
-            button_disabled: false,
+            button_disabled: true,
             status: false
         };
         $scope.raise = {
-            button_disabled: false,
+            button_disabled: true,
             status: false
         };$scope.ready = {
             button_disabled: false,
             status: false
-        };$scope.stand = {
-            button_disabled: false,
+        };$scope.fold = {
+            button_disabled: true,
             status: false
         };
 
