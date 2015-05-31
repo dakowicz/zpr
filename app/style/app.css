@@ -32,29 +32,29 @@ body{
   background-repeat: no-repeat;
   background-size: 100%;
   width:24px;
-  height:19px;
+  height:25px;
   position: absolute;
   left: 130px;
   top: 25px;
 }
 
 .small_blind_button {
-  background-image: url(../components/images/dealerbutton.png);
+  background-image: url(../components/images/little_blind_button.png);
   background-repeat: no-repeat;
   background-size: 100%;
   width:24px;
-  height:19px;
+  height:25px;
   position: absolute;
   left: 105px;
   top: 25px;
 }
 
-.small_blind_button {
-  background-image: url(../components/images/dealerbutton.png);
+.big_blind_button {
+  background-image: url(../components/images/big_blind_button.png);
   background-repeat: no-repeat;
   background-size: 100%;
   width:24px;
-  height:19px;
+  height:25px;
   position: absolute;
   left: 105px;
   top: 25px;
@@ -62,11 +62,13 @@ body{
 
 
 .player_data {
-  background-color:gray;
+  background-image: url(../components/images/player_box.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-attachment: scroll;
   width:120px;
-  height:33px;
+  height:40px;
   font-size: 14px;
-  color:white;
   text-align: center;
   top:50px;
   position:absolute;
@@ -201,7 +203,6 @@ body{
   width:50px;
   height:73px;
   position: absolute;
-  background-image: url(../components/images/cards/ace_of_clubs.png);
   left:0;
   top:0;
   cursor: auto;
@@ -227,18 +228,10 @@ body{
 }
 
 #action_options {
-  width:800px;
+  width:500px;
   height:400px;
   position: absolute;
-  left:400px;
-  top:500px;
-}
-
-#game_options{
-  width:300px;
-  height:200px;
-  position: absolute;
-  left:150px;
+  left:200px;
   top:500px;
 }
 
@@ -269,27 +262,6 @@ body{
   background-color: limegreen;
 }
 
-#fold_button {
-}
-
-#call_button {
-  left:53px;
-}
-
-#raise_button {
-  left:102px;
-}
-
-#sit_button {
-}
-
-#stand_button {
-  left: 40px;
-}
-
-#ready_button {
-  left: 105px;
-}
 
 #chat_and_game_history {
   position:absolute;
