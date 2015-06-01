@@ -22,40 +22,33 @@ body{
 }
 
 .seat {
-  width:150px;
+  width:200px;
   height:150px;
   position: absolute;
 }
 
-.dealer_button {
-  background-image: url(../components/images/dealerbutton.png);
+.board_chips {
   background-repeat: no-repeat;
   background-size: 100%;
   width:24px;
   height:25px;
   position: absolute;
+}
+
+#dealer_button {
+  background-image: url(../components/images/dealerbutton.png);
   left: 130px;
   top: 25px;
 }
 
-.small_blind_button {
+#small_blind_button {
   background-image: url(../components/images/little_blind_button.png);
-  background-repeat: no-repeat;
-  background-size: 100%;
-  width:24px;
-  height:25px;
-  position: absolute;
   left: 105px;
   top: 25px;
 }
 
-.big_blind_button {
+#big_blind_button {
   background-image: url(../components/images/big_blind_button.png);
-  background-repeat: no-repeat;
-  background-size: 100%;
-  width:24px;
-  height:25px;
-  position: absolute;
   left: 105px;
   top: 25px;
 }
@@ -76,6 +69,7 @@ body{
 }
 
 .player_name {
+  color: white;
   width:100%;
 }
 
@@ -86,7 +80,7 @@ body{
   width:50px;
   height:73px;
   background-size: 100%;
-  cursor: pointer;
+  background-repeat: no-repeat;
 }
 
 .player_cards {
@@ -126,10 +120,7 @@ body{
   left:500px;
   top:10px;
 }
-.seat1_dealer_button {
-  left:505px;
-  top:80px;
-}
+
 #seat1 .bet {
   left:30px;
   top:125px;
@@ -187,7 +178,7 @@ body{
 #board {
   position: absolute;
   left:250px;
-  top:168px;
+  top:200px;
 }
 
 #pot {
@@ -235,6 +226,7 @@ body{
   top:500px;
 }
 
+/*
 .action_button {
   background-color: gray;
   position: absolute;
@@ -245,6 +237,7 @@ body{
   font-size: 20px;
   cursor: pointer;
 }
+*/
 
 #game_timer {
   position: absolute;
@@ -264,15 +257,24 @@ body{
 
 
 #chat_and_game_history {
+  background-color: grey;
+  opacity: 0.7;
   position:absolute;
   width:400px;
   height: 600px;
   border-color: black;
-  border-style: solid;
-  opacity: 0.5;
-  border-width: 1px;
+  border-style: groove;
+  border-width: 5px;
   border-radius: 2px;
-  font-size: 10px;
+  font-size: 15px;
   left:900px;
   top:5px;
+}
+
+.type_panel {
+
+}
+
+.entry_table {
+  margin: 20px;
 }
