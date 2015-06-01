@@ -123,7 +123,7 @@ class Table(threading.Thread):
     def __dict(self, player):
         """
             method creates dictionary containing all information about game state, all players and given player cards
-            keys: 'players_number', 'first_card', 'second_card', '0', '1', ... 'n' (depends on players number)
+            keys: 'players_number', '0', '1', ... 'n' (depends on players number)
             'table_card_0', ... , 'table_card_4', 'dealer'
         :param player: Player
         :return: dictionary
