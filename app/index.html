@@ -134,10 +134,12 @@
                 <tr>
                     <th>Who</th>
                     <th>Entry</th>
+                    <th>When</th>
                 </tr>
                 <tr ng-repeat="temp in chat_entries">
-                    <td><{{temp.author}}>:
-                    <td> {{temp.entry_string}}
+                    <td><{{temp.author}}>:</td>
+                    <td> {{temp.string}}</td>
+                    <td> {{temp.dt | date:'HH:mm:ss'}}</td>
                 </tr>
             </table>
 

@@ -140,8 +140,9 @@ angular.module('PokerMain', [
         $scope.addChatEntry = function (){
             if($scope.entry !== '') {
                 $scope.chat_entries.push({
-                    entry_string: $scope.entry,
-                    author: $scope.login
+                    string: $scope.entry,
+                    author: $scope.login,
+                    dt: new Date()
                 });
                 $scope.entry = '';
             }

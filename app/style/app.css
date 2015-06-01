@@ -37,20 +37,20 @@ body{
 
 #dealer_button {
   background-image: url(../components/images/dealerbutton.png);
-  left: 130px;
-  top: 25px;
+  left: 75px;
+  top: 30px;
 }
 
 #small_blind_button {
   background-image: url(../components/images/little_blind_button.png);
-  left: 105px;
-  top: 25px;
+  left: 50px;
+  top: 30px;
 }
 
 #big_blind_button {
   background-image: url(../components/images/big_blind_button.png);
-  left: 105px;
-  top: 25px;
+  left: 50px;
+  top: 30px;
 }
 
 
