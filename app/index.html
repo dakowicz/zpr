@@ -31,7 +31,7 @@
                     <div ng-if = "is_big_blind[0]" id = "big_blind_button" class = "board_chips"></div>
                     <div ng-if = "is_small_blind[0]" id = "small_blind_button" class = "board_chips"></div>
                 </div>
-                <div ng-if = true class="bet">Player 1 bet</div>
+                <div ng-if = player_bet[0] class="bet">Player 1 bet</div>
             </div>
             <div ng-if = "is_player_visible[1]" id="seat2" class="seat">
                 <div class="player_cards">
@@ -45,7 +45,7 @@
                     <div ng-if = "is_big_blind[1]" id = "big_blind_button" class = "board_chips"></div>
                     <div ng-if = "is_small_blind[1]" id = "small_blind_button" class = "board_chips"></div>
                 </div>
-                <div ng-if = true class="bet">Player 2 bet</div>
+                <div ng-if = player_bet[1] class="bet">Player 2 bet</div>
             </div>
             <div ng-if = "is_player_visible[2]" id="seat3" class="seat">
                 <div class="player_cards">
@@ -59,7 +59,7 @@
                     <div ng-if = "is_big_blind[2]" id = "big_blind_button" class = "board_chips"></div>
                     <div ng-if = "is_small_blind[2]" id = "small_blind_button" class = "board_chips"></div>
                 </div>
-                <div ng-if = true class="bet">Player 3 bet</div>
+                <div ng-if = player_bet[2] class="bet">Player 3 bet</div>
             </div>
             <div ng-if = "is_player_visible[3]" id="seat4" class="seat">
                 <div class="player_cards">
@@ -73,7 +73,7 @@
                     <div ng-if = "is_big_blind[3]" id = "big_blind_button" class = "board_chips"></div>
                     <div ng-if = "is_small_blind[3]" id = "small_blind_button" class = "board_chips"></div>
                 </div>
-                <div ng-if = true class="bet">Player 4 bet</div>
+                <div ng-if = player_bet[3] class="bet">Player 4 bet</div>
             </div>
             <div ng-if = "is_player_visible[4]" id="seat5" class="seat">
                 <div class="player_cards">
@@ -87,7 +87,7 @@
                     <div ng-if = "is_big_blind[4]" id = "big_blind_button" class = "board_chips"></div>
                     <div ng-if = "is_small_blind[4]" id = "small_blind_button" class = "board_chips"></div>
                 </div>
-                <div ng-if = true class="bet">Player 5 bet</div>
+                <div ng-if = player_bet[4] class="bet">Player 5 bet</div>
             </div>
             <div ng-if = "is_player_visible[5]" id="seat6" class="seat">
                 <div class="player_cards">
@@ -101,7 +101,7 @@
                     <div ng-if = "is_big_blind[5]" id = "big_blind_button" class = "board_chips"></div>
                     <div ng-if = "is_small_blind[5]" id = "small_blind_button" class = "board_chips"></div>
                 </div>
-                <div ng-if = true class="bet">Player 6 bet</div>
+                <div ng-if = player_is_bet[5] class="bet">Player 6 bet</div>
             </div>
             <div id="board">
                 <div ng-if = "flop.is_visible" id="flop1" class="card boardcard" ng-style="{'background-image': getImageLocation(flop[0].face, flop[0].suit)}"></div>
@@ -124,7 +124,7 @@
                     <div class="form-group">
                         <label class="col-md-1 control-label">Type here:</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" ng-model="entry">
+                            <input type="text" class="form-control" ng-model="new_entry">
                         </div>
                             <input type="submit" value="Submit" class="btn btn-primary"/>
                     </div>
@@ -136,10 +136,10 @@
                     <th>Entry</th>
                     <th>When</th>
                 </tr>
-                <tr ng-repeat="temp in chat_entries">
-                    <td><{{temp.author}}>:</td>
-                    <td> {{temp.string}}</td>
-                    <td> {{temp.dt | date:'HH:mm:ss'}}</td>
+                <tr ng-repeat="entry in chat_entries">
+                    <td><{{entry.author}}>:</td>
+                    <td> {{entry.string}}</td>
+                    <td> {{entry.dt | date:'HH:mm:ss'}}</td>
                 </tr>
             </table>
 

@@ -138,13 +138,13 @@ angular.module('PokerMain', [
         $scope.login = 'popek';
 
         $scope.addChatEntry = function (){
-            if($scope.entry !== '') {
+            if($scope.new_entry !== '') {
                 $scope.chat_entries.push({
-                    string: $scope.entry,
+                    string: $scope.new_entry,
                     author: $scope.login,
                     dt: new Date()
                 });
-                $scope.entry = '';
+                $scope.new_entry = '';
             }
         };
 
