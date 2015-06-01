@@ -1,6 +1,7 @@
-#include <iostream>
 #include <string>
 #include <vector>
+#include <cstdlib>
+#include <algorithm>
 #include <boost/python.hpp>
 
 class Card
@@ -10,9 +11,11 @@ class Card
         Card();
         virtual ~Card();
         void setValues(std::string, std::string);
-        void print();
         std::string getFace();
         std::string getSuit();
+        std::string getFace()const;
+        std::string getSuit()const;
+        bool operator==(const Card &);
     private:
         std::string face;
         std::string suit;
@@ -35,11 +38,6 @@ void Card::setValues(std::string cFace, std::string cSuit)
     face = cFace;
 }
 
-void Card::print()
-{
-    std::cout<<"Face: "<<face<<"\nSuit: "<<suit<<std::endl;
-}
-
 std::string Card::getFace()
 {
     return face;
@@ -48,6 +46,26 @@ std::string Card::getFace()
 std::string Card::getSuit()
 {
     return suit;
+}
+
+std::string Card::getFace()const
+{
+    return face;
+}
+
+std::string Card::getSuit()const
+{
+    return suit;
+}
+
+bool Card::operator==(const Card &card)
+{
+    if(face != card.getFace())
+        return false;
+    if(suit != card.getSuit())
+        return false;
+
+    return true;
 }
 
 Card::~Card()
@@ -268,6 +286,16 @@ bool CardPackage::isStraightFlush()
             else
                 counter = 0;
         }
+        if( cardsMatrix[i][12] && cardsMatrix[i][0] && cardsMatrix[i][1] && cardsMatrix[i][2] && cardsMatrix[i][3])
+        {
+            bestCardsValue[0] = -1;
+            bestCardsValue[1] = 0;
+            bestCardsValue[2] = 1;
+            bestCardsValue[3] = 2;
+            bestCardsValue[4] = 3;
+            handRank = STRAIGHT_FLUSH;
+            return true;
+        }
     }
     return false;
 }
@@ -365,6 +393,16 @@ bool CardPackage::isStraight()
         }
         else
             counter = 0;
+    }
+    if(faces[12] > 0 && faces[0] > 0 && faces[1] > 0 && faces[2] > 0 && faces[3] > 0)
+    {
+        bestCardsValue[0] = -1;
+        bestCardsValue[1] = 0;
+        bestCardsValue[2] = 1;
+        bestCardsValue[3] = 2;
+        bestCardsValue[4] = 3;
+        handRank = STRAIGHT;
+        return true;
     }
     return false;
 }
@@ -567,8 +605,197 @@ boost::python::object CompareCards(boost::python::list set1, boost::python::list
     return pyObject;
 }
 
+void CreateMissingCards(std::vector<Card> &missingCards, std::vector<Card> &handCards, std::vector<Card> &tableCards)
+{
+    std::string faces[] = { "A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2" };
+    std::string suits[] = { "Hearts", "Diamonds", "Spades", "Clubs" };
+
+    Card card;
+    std::vector<Card>::iterator it;
+
+    for(int i = 0; i < 4; ++i)
+    {
+        for(int j = 0; j < 13; ++j)
+        {
+            card.setValues(faces[j], suits[i]);
+            missingCards.push_back(card);
+        }
+    }
+
+    for(int i = 0; i < handCards.size(); ++i)
+    {
+        it = std::find(missingCards.begin(), missingCards.end(), handCards[i]);
+        missingCards.erase(it);
+    }
+
+    for(int i = 0; i < tableCards.size(); ++i)
+    {
+        it = std::find(missingCards.begin(), missingCards.end(), tableCards[i]);
+        missingCards.erase(it);
+    }
+}
+
+boost::python::list CalculateProbability(boost::python::list handCards, boost::python::list tableCards, boost::python::object playersN, boost::python::object N)
+{
+    int iter = boost::python::extract<int>(N);
+
+    int playersNumber = boost::python::extract<int>(playersN);
+    if(playersNumber <= 1)
+    {
+        boost::python::list probability;
+        probability.append(1);
+        probability.append(0);
+        probability.append(0);
+        return probability;
+    }
+
+    int enemysNumber = playersNumber - 1;
+
+    int handCardsSize = boost::python::extract<int>(handCards.attr("__len__")());
+    int tableCardsSize = boost::python::extract<int>(tableCards.attr("__len__")());
+
+    std::vector<Card> covered;
+    std::vector<Card> exposed;
+
+    std::vector<Card> cardsHand;
+    std::vector<Card> cardsTable;
+
+    std::vector<Card> cardsPlayer;
+    std::vector<Card> cardsEnemy[enemysNumber];
+
+    std::string cFace, cSuit;
+    Card card;
+
+    int winCounter = 0;
+    int tieCounter = 0;
+    int loseCounter = 0;
+
+    std::srand(0);
+
+    for(int i = 0; i < handCardsSize; ++i)
+    {
+        cFace = boost::python::extract<std::string>(handCards[i].attr("face"));
+        cSuit = boost::python::extract<std::string>(handCards[i].attr("suit"));
+
+        card.setValues(cFace, cSuit);
+        cardsHand.push_back(card);
+    }
+
+    for(int i = 0; i < tableCardsSize; ++i)
+    {
+        cFace = boost::python::extract<std::string>(tableCards[i].attr("face"));
+        cSuit = boost::python::extract<std::string>(tableCards[i].attr("suit"));
+
+        card.setValues(cFace, cSuit);
+        cardsTable.push_back(card);
+    }
+
+    CreateMissingCards(covered, cardsHand, cardsTable);
+
+    int tableMissing;
+
+    for(int i = 0; i < iter; ++i)
+    {
+        tableMissing = 5 - tableCardsSize;
+        int index;
+
+        for(int j = 0; j < tableCardsSize; ++j)
+        {
+            cardsPlayer.push_back(cardsTable[j]);
+        
+            for(int k = 0; k < enemysNumber; ++k)
+                cardsEnemy[k].push_back(cardsTable[j]);
+        }
+
+        while(tableMissing != 0)
+        {
+            index = std::rand()%covered.size();
+
+            exposed.push_back(covered[index]);
+            cardsPlayer.push_back(covered[index]);
+
+            for(int k = 0; k < enemysNumber; ++k)
+                cardsEnemy[k].push_back(covered[index]);
+
+            covered.erase(covered.begin() + index);
+            --tableMissing;
+        }
+
+        for(int j = 0; j < handCardsSize; ++j)
+        {
+            cardsPlayer.push_back(cardsHand[j]);
+            
+            for(int k = 0; k < enemysNumber; ++k)
+            {
+                index = std::rand()%covered.size();
+
+                exposed.push_back(covered[index]);
+                cardsEnemy[k].push_back(covered[index]);
+
+                covered.erase(covered.begin() + index);
+            }
+        }
+
+        CardPackage cp1(cardsPlayer);
+        CardPackage cp2[enemysNumber];
+        for(int k = 0; k < enemysNumber; ++k)
+            cp2[k].init(cardsEnemy[k]);
+
+        cp1.calculateRank();
+        for(int k = 0; k < enemysNumber; ++k)
+            cp2[k].calculateRank();
+
+        CardPackage *maxPointer = &cp2[0];
+        for(int k = 1; k < enemysNumber; ++k)
+        {
+            if(cp2[k].getHandRank() > maxPointer->getHandRank())
+                maxPointer = &cp2[k];
+            else if(cp2[k].getHandRank() == maxPointer->getHandRank())
+            {
+                if(CompareHandsOfSameType(cp2[k], *maxPointer) == -1)
+                    maxPointer = &cp2[k];
+            }
+        }
+
+
+        if(cp1.getHandRank() > maxPointer->getHandRank())
+            ++winCounter;
+        else if(cp1.getHandRank() < maxPointer->getHandRank())
+            ++loseCounter;
+        else 
+        {
+            int wynik = CompareHandsOfSameType(cp1, *maxPointer);
+            if(wynik == 1)
+                ++loseCounter;
+            else if(wynik == -1)
+                ++winCounter;
+            else
+                ++tieCounter;
+        }
+        
+
+        while(!exposed.empty())
+        {
+            covered.push_back(exposed.back());
+            exposed.pop_back();
+        }
+
+        cardsPlayer.clear();
+        for(int k = 0; k < enemysNumber; ++k)
+            cardsEnemy[k].clear();
+    }
+
+    boost::python::list probability;
+    probability.append((double)winCounter/(double)iter);
+    probability.append((double)tieCounter/(double)iter);
+    probability.append((double)loseCounter/(double)iter);
+
+    return probability;
+}
+
 
 BOOST_PYTHON_MODULE(pokerCalculations)
 {
     boost::python::def("compare_cards", CompareCards);
+    boost::python::def("calculate_probability", CalculateProbability);
 }
