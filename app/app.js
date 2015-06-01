@@ -5,7 +5,7 @@ angular.module('PokerMain', [
 ])
 
 .controller('PokerMainCtrl', function($scope){
-        $scope.version = 0.5;
+        $scope.version = 0.6;
         $scope.card_types = [
         ];
 
@@ -15,8 +15,8 @@ angular.module('PokerMain', [
 
         //card prototype
         $scope.card = {
-            face: 'ace',
-            suit: 'spades'
+            face: 'A',
+            suit: 'Spades'
         };
 
         //image location
@@ -27,18 +27,18 @@ angular.module('PokerMain', [
         //------------------- cards on the center: flop, river, turn ---
         //values
         $scope.flop = [
-            {face: 'ace', suit: 'spades'},
-            {face: 'ace', suit: 'spades'},
-            {face: 'ace', suit: 'spades'}
+            {face: 'A', suit: 'Spades'},
+            {face: 'A', suit: 'Spades'},
+            {face: 'A', suit: 'Spades'}
             ];
         $scope.flop.is_visible = true;
 
         $scope.turn = {
-            face: 'ace', suit: 'hearts',
+            face: 'A', suit: 'Hearts',
             is_visible: true
         };
         $scope.river = {
-            face: 'ace', suit: 'clubs',
+            face: 'A', suit: 'Clubs',
             is_visible: true
         };
 
@@ -65,12 +65,12 @@ angular.module('PokerMain', [
         ];
 
         $scope.player_cards = [
-            {first_card: {face: 'ace', suit: 'spades'},  second_card: {face: 'ace', suit: 'hearts'}},
-            {first_card: {face: 'ace', suit: 'spades'},  second_card: {face: 'ace', suit: 'hearts'}},
-            {first_card: {face: 'ace', suit: 'spades'},  second_card: {face: 'ace', suit: 'hearts'}},
-            {first_card: {face: 'ace', suit: 'spades'},  second_card: {face: 'ace', suit: 'hearts'}},
-            {first_card: {face: 'ace', suit: 'spades'},  second_card: {face: 'ace', suit: 'hearts'}},
-            {first_card: {face: 'ace', suit: 'spades'},  second_card: {face: 'ace', suit: 'hearts'}}
+            {first_card: {face: 'A', suit: 'Spades'},  second_card: {face: 'A', suit: 'Hearts'}},
+            {first_card: {face: 'A', suit: 'Spades'},  second_card: {face: 'A', suit: 'Hearts'}},
+            {first_card: {face: 'A', suit: 'Spades'},  second_card: {face: 'A', suit: 'Hearts'}},
+            {first_card: {face: 'A', suit: 'Spades'},  second_card: {face: 'A', suit: 'Hearts'}},
+            {first_card: {face: 'A', suit: 'Spades'},  second_card: {face: 'A', suit: 'Hearts'}},
+            {first_card: {face: 'A', suit: 'Spades'},  second_card: {face: 'A', suit: 'Hearts'}}
         ];
 
         $scope.player_remaining_time = [

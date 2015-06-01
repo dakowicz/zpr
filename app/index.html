@@ -148,7 +148,7 @@
 
         <!-- block for user options during the game -->
         <div ng-if = true id="action_options">
-            <button ng-disabled = "sit.button_disabled" ng-click = setSit(1) class="btn btn-success">Sit</button>
+            <button ng-disabled = true ng-click = setSit(1) class="btn btn-success">Sit</button>
             <button ng-disabled = "stand.button_disabled" ng-click = setStand(1) class="btn btn-danger">Stand</button>
             <button ng-disabled = "ready.button_disabled" ng-click = setReady() class="btn btn-primary">Ready</button>
             <button ng-disabled = "fold.button_disabled" ng-click = setFold() class="btn btn-primary">Fold</button>
