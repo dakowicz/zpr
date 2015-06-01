@@ -143,7 +143,7 @@ angular.module('PokerMain', [
                     entry_string: $scope.entry,
                     author: $scope.login
                 });
-
+                $scope.entry = '';
             }
         };
 
