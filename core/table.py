@@ -82,7 +82,8 @@ class Table(threading.Thread):
         time.sleep(1)
         for player in self.players:
             try:
-                player.send(self.__dict(player))
+                if not player.leaving:
+                    player.send(self.__dict(player))
             except socket.error:
                 controller.pressed_leave(self, player)
                 print 'Player ' + player.name + ' disconnected'
@@ -129,13 +130,15 @@ class Table(threading.Thread):
         """
         dictionary = {
             'players_number': len(self.players),
-            'first_card': str(player.hand.firstCard),
-            'second_card': str(player.hand.secondCard),
         }
 
         i = 0
         while i < len(self.players):
+            player_visibility = player.visible
+            if self.players[i] is player:
+                player.visible = True
             dictionary[i] = self.players[i].info()
+            player.visible = player_visibility
             i += 1
 
         i = 0

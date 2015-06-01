@@ -25,13 +25,12 @@ class Handler(threading.Thread):
                 print response[str(i)]
                 i += 1
             print response['table_card_0'] + ' ' + response['table_card_1'] + ' ' + response['table_card_2'] + ' ' + response['table_card_3'] + ' ' + response['table_card_4']
-            print response['first_card'] + ' ' + response['second_card']
-            print response['win'] + ' ' + response['draw'] + ' ' + response['loss']
+            print str(response['win']) + ' ' + str(response['draw']) + ' ' + str(response['loss'])
             if 'dealer' in response:
                 print response['dealer']
 
 host = 'localhost'
-port = 20000
+port = 10000
 size = 1024
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

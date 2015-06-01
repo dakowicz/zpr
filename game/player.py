@@ -17,6 +17,7 @@ class Player:
         self.win_probability = 0.0
         self.draw_probability = 0.0
         self.loss_probability = 0.0
+        self.visible = False
         self.fold = False
         self.ready = False
         self.leaving = False
@@ -101,8 +102,12 @@ class Player:
             returns string containing information about player
         :return: string
         """
-        return self.name + ' ' + str(self.ready) + ' ' + str(self.turn) + ' ' + str(self.fold) + ' ' + str(self.chips) + ' ' + str(self.contribution)
-
+        information = self.name + ' '
+        if not self.visible:
+            information += 'None None'
+        else:
+            information += str(self.hand.firstCard) + ' ' + str(self.hand.secondCard)
+        return information + ' ' + str(self.ready) + ' ' + str(self.turn) + ' ' + str(self.fold) + ' ' + str(self.chips) + ' ' + str(self.contribution)
 
     def __add_contribution(self, contribution):
         """

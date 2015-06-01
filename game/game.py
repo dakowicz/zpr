@@ -39,6 +39,7 @@ class Game:
             self.auction()
             self.river()
             self.auction()
+            self.showdown()
             self.deal_win()
             self.prepare_next_round()
             self.table.notify_players()
@@ -180,6 +181,18 @@ class Game:
         self.tableCards.append(self.deck.get_card())
         self.calculate_probability()
         self.table.notify_players()
+
+    def showdown(self):
+        """
+            sends players message about opponent players
+        :return: nothing
+        """
+        for player in self.table.players:
+            if not player.fold:
+                player.visible = True
+        self.table.notify_players()
+        for player in self.table.players:
+            player.visible = False
 
     def pot(self):
         """
