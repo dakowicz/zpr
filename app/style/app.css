@@ -31,6 +31,7 @@ body{
   width:24px;
   height:25px;
   position: absolute;
+
 }
 
 #dealer_button {
@@ -108,6 +109,14 @@ body{
   height:73px;
   background-size: 100%;
   background-repeat: no-repeat;
+
+  /*shadows added*/
+  background-color: transparent;
+  -moz-box-shadow: 0px 0px 20px #000000;
+  -webkit-box-shadow: 0px 0px 20px #000000;
+  box-shadow: 0px 0px 20px #000000;
+  /*IE 7 AND 8 DO NOT SUPPORT BLUR PROPERTY OF SHADOWS*/
+
 }
 
 .player_cards {
@@ -211,7 +220,7 @@ body{
 #pot {
   position: absolute;
   left:325px;
-  top:245px;
+  top:280px;
   font-size: 12px;
   color:white;
   text-align: center;
@@ -221,6 +230,18 @@ body{
   width:50px;
   height:73px;
   position: absolute;
+  left:0;
+  top:0;
+  cursor: auto;
+}
+
+.boardspace {
+  width:50px;
+  height:73px;
+  position: absolute;
+  background-color: black;
+  border-width: 4px;
+  opacity: 0.2;
   left:0;
   top:0;
   cursor: auto;
@@ -268,8 +289,8 @@ body{
 
 #game_timer {
   position: absolute;
-  height:30px;
-  font-size: 12px;
+  height:20px;
+  font-size: 14px;
   text-align: center;
   width:110px;
   left:330px;
@@ -286,7 +307,7 @@ body{
   -webkit-box-shadow: 0px 0px 20px #000000;
   box-shadow: 0px 0px 20px #000000;
   /*IE 7 AND 8 DO NOT SUPPORT BLUR PROPERTY OF SHADOWS*/
-  opacity: 0.86;
+  opacity: 0.85;
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity = 86);
   /*-ms-filter must come before filter*/
   filter: alpha(opacity = 86);

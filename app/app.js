@@ -129,6 +129,10 @@ angular.module('PokerMain', [
             button_disabled: true,
             status: false
         };
+        $scope.bet = {
+            button_disabled: true,
+            status: false
+        };
 
 
         //--------------------chat and game history--------------------

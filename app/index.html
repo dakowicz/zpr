@@ -103,6 +103,15 @@
                 </div>
                 <div ng-if = player_is_bet[5] class="bet">Player 6 bet</div>
             </div>
+            <!-- blank spaces for board cards -->
+            <div id="board">
+                <div id="flop1" class="card boardspace"></div>
+                <div id="flop2" class="card boardspace"></div>
+                <div id="flop3" class="card boardspace"></div>
+                <div id="turn"  class="card boardspace"></div>
+                <div id="river" class="card boardspace"></div>
+            </div>
+            <!-- board cards -->
             <div id="board">
                 <div ng-if = "flop.is_visible" id="flop1" class="card boardcard" ng-style="{'background-image': getImageLocation(flop[0].face, flop[0].suit)}"></div>
                 <div ng-if = "flop.is_visible" id="flop2" class="card boardcard" ng-style="{'background-image': getImageLocation(flop[1].face, flop[1].suit)}"></div>
@@ -110,11 +119,12 @@
                 <div ng-if = "turn.is_visible" id="turn"  class="card boardcard" ng-style="{'background-image': getImageLocation(turn.face, turn.suit)}"></div>
                 <div ng-if = "river.is_visible" id="river" class="card boardcard" ng-style="{'background-image': getImageLocation(river.face, river.suit)}"></div>
             </div>
+
             <div id="pot">
-                <div ng-if = false id="total_pot">Total pot: $999</div>
+                <div ng-if = true class="pot">Total pot: $999</div>
             </div>
         </div>
-        <div ng-if = true id="game_timer" class="timer_normal">Time remaining: :time:</div>
+        <div ng-if = true id="game_timer" class="timer_normal">Time: 140s</div>
 
         <!-- block for chat and game history -->
         <div id="chat_and_game_history">
@@ -146,7 +156,7 @@
 
         </div>
 
-        <!-- block for user options during the game -->
+        <!-- buttons for user options during the game -->
         <div ng-if = true id="action_options">
             <button ng-disabled = true ng-click = setSit(1) class="btn btn-success">Sit</button>
             <button ng-disabled = "stand.button_disabled" ng-click = setStand(1) class="btn btn-danger">Stand</button>
@@ -154,7 +164,8 @@
             <button ng-disabled = "fold.button_disabled" ng-click = setFold() class="btn btn-primary">Fold</button>
             <button ng-disabled = "call.button_disabled" ng-click = setCall() class="btn btn-primary" >Call</button>
             <button ng-disabled = "raise.button_disabled" ng-click = setRaise() class="btn btn-primary">Raise</button>
-            <input type="range" ng-model = "player_bet[0]" min="1" max="20">
+            <button ng-disabled = "bet.button_disabled" ng-click = setBet() class="btn btn-primary">Bet</button>
+            <input type="range" ng-model = "player_bet[0]" min="1" max="6000">
             <p style="color: white" ng-bind = "player_bet[0]"></p>
 
         </div>
