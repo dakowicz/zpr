@@ -7,7 +7,6 @@
 
 body{
   background-image: url(../components/images/background.jpg);
-  background-position: center center;
   background-repeat: no-repeat;
   background-attachment: ;
   background-size: cover;
@@ -220,7 +219,7 @@ body{
 
 #action_options {
   width:500px;
-  height:400px;
+  height:150px;
   position: absolute;
   left:200px;
   top:500px;
