@@ -42,6 +42,7 @@ class Server:
                     command = sys.stdin.readline().rstrip('\n')
                     if command == 'exit':
                         print 'Closing server'
+                        self.delete_empty_tables()
                         running = False
                     else:
                         print 'Command \'' + command + '\' not known'

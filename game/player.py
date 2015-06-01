@@ -14,6 +14,9 @@ class Player:
         self.chips = game.Game.STARTING_CHIPS
         self.hand = hand.Hand()
         self.contribution = 0
+        self.win_probability = 0.0
+        self.draw_probability = 0.0
+        self.loss_probability = 0.0
         self.fold = False
         self.ready = False
         self.leaving = False
@@ -99,6 +102,7 @@ class Player:
         :return: string
         """
         return self.name + ' ' + str(self.ready) + ' ' + str(self.turn) + ' ' + str(self.fold) + ' ' + str(self.chips) + ' ' + str(self.contribution)
+
 
     def __add_contribution(self, contribution):
         """

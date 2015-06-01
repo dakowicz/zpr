@@ -19,13 +19,14 @@ class Handler(threading.Thread):
                 response = json.loads(self.server_socket.recv(self.size))
             except ValueError:
                 print 'ValueError'
-            print 'Response: \'' + str(response['players_number'])
+            print str(response['players_number'])
             i = 0
             while i < response['players_number']:
                 print response[str(i)]
                 i += 1
             print response['table_card_0'] + ' ' + response['table_card_1'] + ' ' + response['table_card_2'] + ' ' + response['table_card_3'] + ' ' + response['table_card_4']
             print response['first_card'] + ' ' + response['second_card']
+            print response['win'] + ' ' + response['draw'] + ' ' + response['loss']
             if 'dealer' in response:
                 print response['dealer']
 

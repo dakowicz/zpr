@@ -29,6 +29,7 @@ class Game:
         self.start()
         while len(self.table.players) > 1:
             self.distribute_cards()
+            self.calculate_probability()
             self.set_blinds()
             self.table.notify_players()
             self.auction()
@@ -159,6 +160,7 @@ class Game:
         """
         for i in range(3):
             self.tableCards.append(self.deck.get_card())
+        self.calculate_probability()
         self.table.notify_players()
 
     def turn(self):
@@ -167,6 +169,7 @@ class Game:
         :return: nothing
         """
         self.tableCards.append(self.deck.get_card())
+        self.calculate_probability()
         self.table.notify_players()
 
     def river(self):
@@ -175,6 +178,7 @@ class Game:
         :return: nothing
         """
         self.tableCards.append(self.deck.get_card())
+        self.calculate_probability()
         self.table.notify_players()
 
     def pot(self):
@@ -228,6 +232,18 @@ class Game:
         for player in winners:
             print player.name
         return winners
+
+    def calculate_probability(self):
+        for player in self.table.players:
+            if player.fold:
+                player.win_probability = 0.0
+                player.draw_probability = 0.0
+                player.loss_probability = 100.0
+            else:
+                probability = calculations.pokerCalculations.calculate_probability(player.get_cards(), self.tableCards, self.not_folded_players(), 10000)
+                player.win_probability = probability[0] * 100
+                player.draw_probability = probability[1] * 100
+                player.loss_probability = probability[2] * 100
 
     def prepare_next_round(self):
         """
