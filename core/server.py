@@ -34,6 +34,7 @@ class Server:
                 if s == self.server:
                     player_socket = self.server.accept()
                     message = json.loads(player_socket[0].recv(Server.package_size))
+                    print message
                     name = message['content']
                     print 'New player: ' + name
                     self.get_table().add_player(game.player.Player(name, player_socket))

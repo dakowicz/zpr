@@ -1,4 +1,7 @@
 #!/usr/bin/python
+import os.path
+import sys
+sys.path.append(os.path.pardir)
 import threading
 import socket
 import json

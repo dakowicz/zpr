@@ -20,8 +20,8 @@ body{
 }
 
 .seat {
-  width:200px;
-  height:150px;
+  width:auto;
+  height:auto;
   position: absolute;
 }
 
@@ -31,25 +31,22 @@ body{
   width:24px;
   height:25px;
   position: absolute;
-
+  top: 35px;
 }
 
 #dealer_button {
   background-image: url(../components/images/dealerbutton.png);
   left: 75px;
-  top: 30px;
 }
 
 #small_blind_button {
   background-image: url(../components/images/little_blind_button.png);
   left: 50px;
-  top: 30px;
 }
 
 #big_blind_button {
   background-image: url(../components/images/big_blind_button.png);
   left: 50px;
-  top: 30px;
 }
 
 
@@ -219,11 +216,11 @@ body{
 
 #pot {
   position: absolute;
-  left:325px;
+  left:340px;
   top:280px;
   font-size: 12px;
-  color:white;
-  text-align: center;
+  color: white;
+  width: auto;
 }
 
 .boardcard {
@@ -267,8 +264,6 @@ body{
 }
 
 #action_options {
-  width:500px;
-  height:150px;
   position: absolute;
   left:200px;
   top:500px;
@@ -317,16 +312,48 @@ body{
 
 
 #chat_and_game_history {
-  background-color: grey;
-  opacity: 0.7;
+  background-color: #ffffff;
+  border: 4px solid #999999;
+  -moz-border-radius: 30px;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
+  /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
+  -moz-box-shadow: 0px 0px 20px #000000;
+  -webkit-box-shadow: 0px 0px 20px #000000;
+  box-shadow: 0px 0px 20px #000000;
+  /*IE 7 AND 8 DO NOT SUPPORT BLUR PROPERTY OF SHADOWS*/
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#b8b8b8', endColorstr = '#000000');
+  /*INNER ELEMENTS MUST NOT BREAK THIS ELEMENTS BOUNDARIES*/
+  /*Element must have a height (not auto)*/
+  /*All filters must be placed together*/
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr = '#b8b8b8', endColorstr = '#000000')";
+  /*Element must have a height (not auto)*/
+  /*All filters must be placed together*/
+  background-image: -moz-linear-gradient(top, #b8b8b8, #000000);
+  background-image: -ms-linear-gradient(top, #b8b8b8, #000000);
+  background-image: -o-linear-gradient(top, #b8b8b8, #000000);
+  background-image: -webkit-gradient(linear, center top, center bottom, from(#b8b8b8), to(#000000));
+  background-image: -webkit-linear-gradient(top, #b8b8b8, #000000);
+  background-image: linear-gradient(top, #b8b8b8, #000000);
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  /*Use "background-clip: padding-box" when using rounded corners to avoid the gradient bleeding through the corners*/
+  /*--IE9 WILL PLACE THE FILTER ON TOP OF THE ROUNDED CORNERS--*/
+  opacity: 0.6;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity = 45);
+  /*-ms-filter must come before filter*/
+  filter: alpha(opacity = 45);
+  /*INNER ELEMENTS MUST NOT BREAK THIS ELEMENTS BOUNDARIES*/
+  /*All filters must be placed together*/
+
   position:absolute;
   width:400px;
   height: 600px;
-  border-color: black;
-  border-style: groove;
-  border-width: 5px;
-  border-radius: 2px;
   font-size: 15px;
+  font-family:"Lucida Console", Monaco, monospace;
+  text-align: center;
+  color: #3d3d3d;
   left:900px;
   top:5px;
 }

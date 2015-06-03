@@ -2,16 +2,19 @@
 'use strict'
 angular.module('PokerMain', [
 
-])
+    ])
 
-.controller('PokerMainCtrl', function($scope){
+
+.controller('PokerCtrl', function($scope, $http){
         $scope.version = 0.6;
-        $scope.card_types = [
-        ];
 
-        //game variables
-        $scope.big_blind = 2;
-        $scope.small_blind = 1;
+        $http.get("http://www.w3schools.com/angular/customers.php")
+                .success(function(response) {
+                    $scope.names = response.records;
+            });
+
+        //number of players
+        $scope.players_nr = 6;
 
         //card prototype
         $scope.card = {
@@ -19,15 +22,30 @@ angular.module('PokerMain', [
             suit: 'Spades'
         };
 
+        //server settings
+        $scope.host = 'localhost';
+        $scope.size = 1024;
+        $scope.port = 10000;
+
+
         //image location
         $scope.getImageLocation = function(face, suit){
           return 'url(components/images/cards/' + face + '_of_' + suit + '.png)';
         };
 
+        //maximum amount in players' contributions
+        Array.max = function( array ){
+            return Math.max.apply( Math, array );
+        };
+
+        $scope.getMax = function(){
+            return Array.max( $scope.player_contribution );
+        };
+
         //------------------- cards on the center: flop, river, turn ---
         //values
         $scope.flop = [
-            {face: 'A', suit: 'Spades'},
+            {face: 'A', suit: 'Clubs'},
             {face: 'A', suit: 'Spades'},
             {face: 'A', suit: 'Spades'}
             ];
@@ -60,8 +78,14 @@ angular.module('PokerMain', [
             true, false, false, false, false, false
         ];
 
-        $scope.player_name = [
+        $scope.dealer = 1;
+        $scope.big_blind = ($scope.dealer + 2) % ($scope.players_nr);
+        $scope.small_blind = ($scope.dealer + 1) % ($scope.players_nr);
 
+        $scope.game_has_started = true;
+
+        $scope.player_name = [
+            'popek', 'tomasz', 'maciej', 'popek', 'tomasz', 'maciej'
         ];
 
         $scope.player_cards = [
@@ -77,17 +101,24 @@ angular.module('PokerMain', [
 
         ];
 
-        $scope.player_bet = [
-
+        $scope.player_contribution = [
+            1,12,3,4,5,6
         ];
 
         $scope.player_stack = [
             1,2,3,4,5,6
         ];
 
-        $scope.setSit = function(number) {
-            $scope.is_player_visible[number - 1] = true;
+        $scope.player_turn = {
+
         };
+
+        $scope.is_player_ready = [
+
+        ];
+
+        $scope.new_bet = '';
+
         $scope.setStand = function(number) {
             $scope.is_player_visible[number - 1] = false;
         };
@@ -103,6 +134,18 @@ angular.module('PokerMain', [
         $scope.setRaise = function() {
             $scope.raise.status = true;
         };
+
+        $scope.getBetAmount = function(){
+            return $scope.bet.amount;
+        };
+
+        $scope.setBet = function(val) {
+            if (val !== '' && val !== undefined) {
+                $scope.bet.amount = val;
+                val = 0;
+            }
+        };
+
 
         //------------------- buttons ---------------------------------
         $scope.sit = {
@@ -130,27 +173,47 @@ angular.module('PokerMain', [
             status: false
         };
         $scope.bet = {
-            button_disabled: true,
-            status: false
+            button_disabled: false,
+            status: false,
+            amount: 0
         };
 
+        //checks if any button should be disabled
+        $scope.checkButtons = function() {
+        };
 
         //--------------------chat and game history--------------------
         $scope.chat_entries = [];
         $scope.entry = '';
+        $scope.is_logged = false;
 
-        $scope.login = 'popek';
+        $scope.user_login = 'popek';
+        $scope.new_user_login = '';
+        $scope.new_entry = '';
+
+        $scope.setLogin = function (){
+            if($scope.new_user_login !== '') {
+                $scope.user_login = $scope.new_user_login;
+                $scope.new_user_login = '';
+                $scope.is_logged = true;
+            }
+        };
 
         $scope.addChatEntry = function (){
-            if($scope.new_entry !== '') {
+            console.log($scope.new_entry);
+            if($scope.new_entry !== ''  && $scope.new_entry !== undefined) {
                 $scope.chat_entries.push({
                     string: $scope.new_entry,
-                    author: $scope.login,
+                    author: $scope.user_login,
                     dt: new Date()
                 });
                 $scope.new_entry = '';
             }
         };
+
+        $scope.decode_utf8 =  function (s) {
+            return unescape(encodeURIComponent(s));
+        }
 
     })
 ;
