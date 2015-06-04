@@ -142,11 +142,12 @@
 
                 <form class="form-horizontal type_panel" role="form" ng-submit = addChatEntry()>
                     <div class="form-group">
-                        <input type="text" class="form-control" ng-model="new_entry" placeholder="Send a message" ng-maxlength="20">
+                        <input type="text" class="form-control" ng-model="new_entry" placeholder="Send a message (max 20 chars)" ng-maxlength="20">
                         <input type="submit" value="Submit" class="btn btn-primary"/>
                     </div>
                 </form>
 
+            <div id="scrollable">
                 <table class="table table-striped table-bordered">
                     <thead>
                     <tr>
@@ -155,14 +156,19 @@
                         <th >Time</th>
                     </tr>
                     </thead>
+
                     <tbody>
-                    <tr ng-repeat="entry in chat_entries" row-id="{{ entry.author }}" >
+                    <tr ng-repeat="entry in chat_entries" >
                         <td>{{ entry.author }}</td>
                         <td>{{ entry.string }}</td>
                         <td>{{entry.dt | date:'HH:mm:ss'}}</td>
+                        <script>
+                            console.log(document.getElementById("chat_entries[5]"));
+                        </script>
                     </tr>
                     </tbody>
                 </table>
+            </div>
         </div>
 
         <!-- buttons for user options during the game -->
@@ -180,24 +186,31 @@
                     <input type="submit" value="Submit" class="btn btn-primary"/>
                 </div>
             </form>
+        </div>
 
+        <div ng-if = true id="hand_power_panel">
+            <p>Player's odds</p>
+
+        </div>
 
             <!-- script receiving/sending data to server -->
             <script>
 
                 var p = {
-                    content: 'tomcio'
+                    content: "tomcio"
                 };
                 console.log(p);
 
-
                 window.onload = function() {
                     var s = new WebSocket("ws://localhost:10000/");
-                    var jsonik = JSON.stringify(p);
-                    var kod = decodeURI(jsonik);
+                    var kod = JSON.stringify(p);
+
                     console.log(kod);
-                    s.send(kod);
-                    s.onopen = function(e) { alert("opened"); };
+
+                    s.onopen = function(e) {
+                        alert("opened");
+                        s.send(kod);
+                    };
                     s.onclose = function(e) { alert("closed"); };
                     s.onmessage = function(e) { alert("got: " + e.data);}
                     console.log(s.readyState);
