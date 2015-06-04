@@ -196,13 +196,27 @@
             <!-- script receiving/sending data to server -->
             <script>
 
+                var p = {
+                    content: "stefanasdasdaasd"
+                };
+
+                var kod = JSON.stringify(p);
 
 
                 window.onload = function() {
                     var s = new WebSocket("ws://localhost:10000/");
-                    s.onopen = function(e) { alert("opened"); }
-                    s.onclose = function(e) { alert("closed"); }
-                    s.onmessage = function(e) { alert("got: " + e.data); }
+
+
+                    s.onopen = function(e) {
+                        s.send(kod);
+                        alert("opened");
+                    };
+                    s.onclose = function(e) {
+                        alert("closed");
+                    };
+                    s.onmessage = function(e) {
+                        alert("got: " + e.data);
+                    };
                 };
 
 //                var p = {

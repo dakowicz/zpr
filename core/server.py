@@ -42,7 +42,8 @@ class Server:
                     player_socket = self.server.accept()
                     self.handshake(player_socket[0])
 
-                    message = json.loads(player_socket[0].recv(Server.package_size))
+                    message = json.loads(self.recv_data(player_socket[0]))
+
                     name = message['content']
                     print 'New player: ' + name
                     self.get_table().add_player(game.player.Player(name, player_socket))
@@ -63,7 +64,7 @@ class Server:
 
     def handshake(self, client):
         print 'Handshaking...'
-        data = client.recv(1024)
+        data = client.recv(Server.package_size)
         headers = self.parse_headers(data)
 
         digest = create_hash(headers['Sec-WebSocket-Key'])
@@ -131,3 +132,39 @@ class Server:
                 self.tables.remove(table)
                 i -= 1
                 print 'Empty table removed'
+
+        """
+            method decodes receive data from HTML WebSocket client
+        :return: nothing
+        """
+    def recv_data (self, client):
+            # as a simple server, we expect to receive:
+            #    - all data at one go and one frame
+            #    - one frame at a time
+            #    - text protocol
+            #    - no ping pong messages
+            data = bytearray(client.recv(Server.package_size))
+
+            print data
+
+            if(len(data) < 6):
+                raise Exception("Error reading data")
+            # FIN bit must be set to indicate end of frame
+
+            assert(0x1 == (0xFF & data[0]) >> 7)
+            # data must be a text frame
+            # 0x8 (close connection) is handled with assertion failure
+            assert(0x1 == (0xF & data[0]))
+
+            # assert that data is masked
+            assert(0x1 == (0xFF & data[1]) >> 7)
+            datalen = (0x7F & data[1])
+
+            str_data = ''
+            if(datalen > 0):
+                mask_key = data[2:6]
+                masked_data = data[6:(6+datalen)]
+                unmasked_data = [masked_data[i] ^ mask_key[i%4] for i in range(len(masked_data))]
+                str_data = str(bytearray(unmasked_data))
+            print str_data
+            return str_data
