@@ -47,7 +47,7 @@ def handshake(client):
     shake = "HTTP/1.1 101 Web Socket Protocol\r\n"
     shake += "Upgrade: WebSocket\r\n"
     shake += "Connection: Upgrade\r\n"
-    shake += "Sec-WebSocket-Accept: " + digest + "\r\n"
+    shake += "Sec-WebSocket-Accept: " + digest + "\r\n\r\n"
 
     return client.send(shake)
 
