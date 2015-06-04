@@ -80,7 +80,9 @@ angular.module('PokerMain', [
 
         $scope.game_has_started = true;
 
-        $scope.hand_power = false;
+        $scope.is_hand_power_visible = false;
+
+        $scope.is_user_turn = false;
 
         $scope.player_name = [
             'popek', 'tomasz', 'maciej', 'popek', 'tomasz', 'maciej'
@@ -98,6 +100,12 @@ angular.module('PokerMain', [
         $scope.player_remaining_time = [
 
         ];
+
+        $scope.user_odds = {
+            win: 10,
+            draw: 20,
+            lose: 30
+        };
 
         $scope.player_contribution = [
             1,12,3,4,5,6
@@ -148,6 +156,16 @@ angular.module('PokerMain', [
             }
         };
 
+        $scope.setLogin = function(val){
+            if(val != '' && $scope.login.status == false) {
+                $scope.user_login = val;
+                $scope.message_server.content = val;
+                $scope.socket.send(JSON.stringify($scope.message_server));
+                $scope.login.status = true;
+                $scope.login.button_disabled = true;
+            }
+        };
+
 
         //------------------- buttons ---------------------------------
         $scope.sit = {
@@ -178,6 +196,10 @@ angular.module('PokerMain', [
             button_disabled: false,
             status: false,
             amount: 0
+        };
+        $scope.login = {
+            button_disabled: false,
+            status: false
         };
 
         //checks if any button should be disabled
@@ -216,9 +238,23 @@ angular.module('PokerMain', [
             }
         };
 
-        $scope.decode_utf8 =  function (s) {
-            return unescape(encodeURIComponent(s));
-        }
+        //----------------- server connection -------------------------
 
+        $scope.message_server = '';
+
+        $scope.socket = new WebSocket("ws://localhost:10000/");
+
+
+        $scope.socket.onclose = function(e) {
+            console.log("closed");
+        };
+        $scope.socket.onopen = function(e) {
+            console.log("opened connection")
+        };
+
+        $scope.socket.onmessage = function(e) {
+            var msg = JSON.parse(e.data);
+            console.log(msg);
+        };
     })
 ;

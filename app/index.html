@@ -11,14 +11,12 @@
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="https://rawgithub.com/alalonde/angular-scrollable-table/master/angular-scrollable-table.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
     <script src="app.js"></script>
 
     <!-- client script -->
 
 </head>
     <body ng-controller = "PokerCtrl">
-
         <div id="poker_table" class="poker_table" data-uid="">
             <div ng-show = "player_name[0] != undefined" id="seat1" class="seat">
                 <div class="player_cards">
@@ -30,9 +28,9 @@
                 <div class="player_data">
                     <div class="player_name" >{{player_name[0]}}</div>
                     <div class="player_name" >Stack: ${{player_stack[0]}}</div>
-                    <div ng-if = "dealer == 0" id = "dealer_button" class = "board_chips"></div>
-                    <div ng-if = "big_blind == 0" id = "big_blind_button" class = "board_chips"></div>
-                    <div ng-if = "small_blind == 0" id = "small_blind_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && dealer == 0" id = "dealer_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && big_blind == 0" id = "big_blind_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && small_blind == 0" id = "small_blind_button" class = "board_chips"></div>
                 </div>
                 <div ng-if = player_bet[0] class="bet">Player 1 bet</div>
             </div>
@@ -46,9 +44,9 @@
                 <div class="player_data">
                     <div class="player_name">{{player_name[1]}}</div>
                     <div class="player_name">Stack: ${{player_stack[1]}}</div>
-                    <div ng-if = "dealer == 1" id = "dealer_button" class = "board_chips"></div>
-                    <div ng-if = "big_blind == 1" id = "big_blind_button" class = "board_chips"></div>
-                    <div ng-if = "small_blind == 1" id = "small_blind_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && dealer == 1" id = "dealer_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && big_blind == 1" id = "big_blind_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && small_blind == 1" id = "small_blind_button" class = "board_chips"></div>
                 </div>
                 <div ng-if = player_bet[1] class="bet">Player 2 bet</div>
             </div>
@@ -62,9 +60,9 @@
                 <div class="player_data">
                     <div class="player_name">{{player_name[2]}}</div>
                     <div  class="player_name">Stack: ${{player_stack[2]}}</div>
-                    <div ng-if = "dealer == 2" id = "dealer_button" class = "board_chips"></div>
-                    <div ng-if = "big_blind == 2" id = "big_blind_button" class = "board_chips"></div>
-                    <div ng-if = "small_blind == 2" id = "small_blind_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && dealer == 2" id = "dealer_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && big_blind == 2" id = "big_blind_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && small_blind == 2" id = "small_blind_button" class = "board_chips"></div>
                 </div>
                 <div ng-if = player_bet[2] class="bet">Player 3 bet</div>
             </div>
@@ -78,9 +76,9 @@
                 <div class="player_data">
                     <div class="player_name">{{player_name[3]}}</div>
                     <div class="player_name">Stack: ${{player_stack[3]}}</div>
-                    <div ng-if = "dealer == 3" id = "dealer_button" class = "board_chips"></div>
-                    <div ng-if = "big_blind == 3" id = "big_blind_button" class = "board_chips"></div>
-                    <div ng-if = "small_blind == 3" id = "small_blind_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && dealer == 3" id = "dealer_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && big_blind == 3" id = "big_blind_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && small_blind == 3" id = "small_blind_button" class = "board_chips"></div>
                 </div>
                 <div ng-if = player_bet[3] class="bet">Player 4 bet</div>
             </div>
@@ -94,9 +92,9 @@
                 <div class="player_data">
                     <div class="player_name">{{player_name[4]}}</div>
                     <div class="player_name">Stack: ${{player_stack[4]}}</div>
-                    <div ng-if = "dealer == 4" id = "dealer_button" class = "board_chips"></div>
-                    <div ng-if = "big_blind == 4" id = "big_blind_button" class = "board_chips"></div>
-                    <div ng-if = "small_blind == 4" id = "small_blind_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && dealer == 4" id = "dealer_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && big_blind == 4" id = "big_blind_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && small_blind == 4" id = "small_blind_button" class = "board_chips"></div>
                 </div>
                 <div ng-if = player_bet[4] class="bet">Player 5 bet</div>
             </div>
@@ -110,9 +108,9 @@
                 <div class="player_data">
                     <div class="player_name">{{player_name[5]}}</div>
                     <div class="player_name">Stack: ${{player_stack[5]}}</div>
-                    <div ng-if = "dealer == 5" id = "dealer_button" class = "board_chips"></div>
-                    <div ng-if = "big_blind == 5" id = "big_blind_button" class = "board_chips"></div>
-                    <div ng-if = "small_blind == 5" id = "small_blind_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && dealer == 5" id = "dealer_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && big_blind == 5" id = "big_blind_button" class = "board_chips"></div>
+                    <div ng-if = "game_has_started && small_blind == 5" id = "small_blind_button" class = "board_chips"></div>
                 </div>
                 <div ng-if = player_is_bet[5] class="bet">Player 6 bet</div>
             </div>
@@ -134,15 +132,15 @@
                 <div ng-if = true class="pot">Total pot: $999</div>
             </div>
         </div>
-        <div ng-if = true id="game_timer" class="timer_normal">Time: 140s</div>
+        <div ng-show = "is_user_turn" id="game_timer" class="timer_normal">Time: 140s</div>
 
         <!-- block for chat and game history -->
         <div id="chat_and_game_history">
             <h3>Chat & Game History</h3>
 
-                <form class="form-horizontal type_panel" role="form" ng-submit = addChatEntry()>
+                <form class="form-horizontal" role="form" ng-submit = addChatEntry()>
                     <div class="form-group">
-                        <input type="text" class="form-control" ng-model="new_entry" placeholder="Send a message (max 20 chars)" ng-maxlength="20">
+                        <input type="text" class="form-control" ng-model="new_entry" placeholder="Send a message (max 25 chars)" ng-maxlength="25">
                         <input type="submit" value="Submit" class="btn btn-primary"/>
                     </div>
                 </form>
@@ -162,9 +160,6 @@
                         <td>{{ entry.author }}</td>
                         <td>{{ entry.string }}</td>
                         <td>{{entry.dt | date:'HH:mm:ss'}}</td>
-                        <script>
-                            console.log(document.getElementById("chat_entries[5]"));
-                        </script>
                     </tr>
                     </tbody>
                 </table>
@@ -184,114 +179,14 @@
             <form class="form-horizontal type_panel" role="form" ng-submit = setBet(val)>
                 <div class="form-group">
                     <input type="text" class="form-control" ng-model="new_bet" name = "val" placeholder = "Insert an amount to bet">
-                    <input type="submit" value="Submit" class="btn btn-primary"/>
+                    <input type="submit" value="Bet" class="btn btn-primary"/>
                 </div>
             </form>
         </div>
 
-        <div id="hand_power_panel">
-            <label><input type="checkbox" ng-model = "hand_power" >Player's winning odds</label>
-            <h1 ng-show = "hand_power" >Player's odds</h1>
+        <div ng-show = "game_has_started" id="hand_power_panel">
+            <label><input type="checkbox" ng-model = "is_hand_power_visible" >Player's winning odds</label>
+            <h3 ng-show = "is_hand_power_visible">Win: {{user_odds.win}}% Draw: {{user_odds.draw}}% Lose: {{user_odds.lose}}%</h3>
         </div>
-
-            <!-- script receiving/sending data to server -->
-            <script>
-
-                var p = {
-                    content: "tomcio"
-                };
-
-                var kod = JSON.stringify(p);
-
-
-                try{
-                    var flag = 1;
-                    var s = new WebSocket("ws://localhost:2000/");
-
-                    s.onopen = function(e) {
-
-                        console.log("opened connection")
-                        //sending initial message with login
-                        s.send(kod);
-
-                        var user_ready = 1;
-                        //connection is established
-                        if(user_ready == 1) {
-                            p.content = "start";
-                            s.send(JSON.stringify(p));
-                            user_ready = 0;
-                        }
-                    };
-                    s.onerror = function(e) {
-
-                        console.log("error " + e.data);
-                    };
-                    s.onmessage = function(e) {
-                    console.log("getinput");
-                    console.log(e.data);
-                        var msg = JSON.parse(e.data);
-                        console.log(msg);
-                    };
-
-
-                } catch (ex) {
-                    console.log("connection exception:" + ex);
-                }
-
-
-//                var p = {
-//                    content: "tomcio"
-//                };
-//                console.log(p);
-//
-//                window.onload = function() {
-//                    var s = new WebSocket("ws://localhost:10000/");
-//                    var kod = JSON.stringify(p);
-//
-//                    console.log(kod);
-//
-//                    s.onopen = function(e) {
-//                        s.send(kod);
-//                        console.log("opened");
-//                    };
-//                    s.onclose = function(e) {
-//                        console.log("closed");
-//                    };
-//                    s.onmessage = function(e) {
-//                        console.log("got: " + e.data);
-//                    };
-//                };
-
-
-
-//                var gniazdo = new WebSocket("ws://localhost:10000");
-//
-//                var data_to_send = {
-//                    content: 'elo'
-//                };
-//
-//                gniazdo.onopen = function()
-//                {
-//                    // Web Socket is connected, send data using send()
-//                    gniazdo.send(JSON.stringify(data_to_send));
-//                    console.log("Message is sent...");
-//                };
-//
-//                gniazdo.onmessage = function (evt)
-//                {
-//                    var received_msg = evt.data;
-//                    console.log("Message is received...");
-//                };
-//
-//                gniazdo.onclose = function()
-//                {
-//                    // websocket is closed.
-//                    console.log("Connection is closed...");
-//                };
-
-
-            </script>
-
-
     </body>
 </html>
