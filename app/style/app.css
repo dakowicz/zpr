@@ -392,15 +392,11 @@ body{
   top:5px;
 }
 
-#fixed {
-  padding-bottom: 10px;
-}
-
 #scrollable {
   overflow-y: scroll;
-  height: 75%;
+  height: 70%;
+  padding: 20px;
 }
-
 
 .type_panel {
 
