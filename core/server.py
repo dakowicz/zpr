@@ -48,9 +48,6 @@ def handshake(client):
     shake += "Upgrade: WebSocket\r\n"
     shake += "Connection: Upgrade\r\n"
     shake += "Sec-WebSocket-Accept: " + digest + "\r\n"
-    shake += "Sec-WebSocket-Origin: %s\r\n" % (headers['Origin'])
-    shake += "Sec-WebSocket-Location: ws://%s/stuff\r\n" % (headers['Host'])
-    shake += "Sec-WebSocket-Protocol: sample\r\n\r\n"
 
     return client.send(shake)
 
