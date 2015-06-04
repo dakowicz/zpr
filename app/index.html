@@ -180,6 +180,7 @@
             <button ng-disabled = "call.button_disabled" ng-click = setCall() class="btn btn-primary" >Call</button>
             <button ng-disabled = "raise.button_disabled" ng-click = setRaise() class="btn btn-primary">Raise</button>
 
+
             <form class="form-horizontal type_panel" role="form" ng-submit = setBet(val)>
                 <div class="form-group">
                     <input type="text" class="form-control" ng-model="new_bet" name = "val" placeholder = "Insert an amount to bet">
@@ -188,36 +189,53 @@
             </form>
         </div>
 
-        <div ng-if = true id="hand_power_panel">
-            <p>Player's odds</p>
-
+        <div id="hand_power_panel">
+            <label><input type="checkbox" ng-model = "hand_power" >Player's winning odds</label>
+            <h1 ng-show = "hand_power" >Player's odds</h1>
         </div>
 
             <!-- script receiving/sending data to server -->
             <script>
 
                 var p = {
-                    content: "stefanasdasdaasd"
+                    content: "tomcio"
                 };
 
                 var kod = JSON.stringify(p);
 
 
-                window.onload = function() {
+                try{
+
                     var s = new WebSocket("ws://localhost:10000/");
 
-
                     s.onopen = function(e) {
+
+                        console.log("opened connection")
+                        //sending initial message with login
                         s.send(kod);
-                        alert("opened");
+
+                        var user_ready = 1;
+                        //connection is established
+                        if(user_ready == 1) {
+                            p.content = "start";
+                            s.send(JSON.stringify(p));
+                            user_ready = 0;
+                        }
+
+
                     };
                     s.onclose = function(e) {
-                        alert("closed");
+                        console.log("closed");
                     };
                     s.onmessage = function(e) {
-                        alert("got: " + e.data);
+                        var msg = JSON.parse(e.data);
+                        console.log(msg);
                     };
-                };
+                } catch (ex) {
+                    console.log("connection exception:" + ex);
+                }
+
+
 
 //                var p = {
 //                    content: "tomcio"

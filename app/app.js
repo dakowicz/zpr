@@ -80,6 +80,8 @@ angular.module('PokerMain', [
 
         $scope.game_has_started = true;
 
+        $scope.hand_power = false;
+
         $scope.player_name = [
             'popek', 'tomasz', 'maciej', 'popek', 'tomasz', 'maciej'
         ];
@@ -187,7 +189,7 @@ angular.module('PokerMain', [
         $scope.entry = '';
         $scope.is_logged = false;
 
-        $scope.user_login = 'popek';
+        $scope.user_login = 'popekpopek';
         $scope.new_user_login = '';
         $scope.new_entry = '';
 
