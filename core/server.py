@@ -69,7 +69,6 @@ class Server:
             to close server type 'exit' in standard input
         :return: nothing
         """
-        print create_hash("dGhlIHNhbXBsZSBub25jZQ==")
         self.open_socket()
         input = [self.server, sys.stdin]
         running = True
@@ -81,13 +80,11 @@ class Server:
                 if s == self.server:
                     player_socket = self.server.accept()
                     handshake(player_socket[0])
-                    message = player_socket[0].recv(Server.package_size)
 
-                    #message = json.loads(player_socket[0].recv(Server.package_size))
-                    print message
-                    #name = message['content']
-                    #print 'New player: ' + name
-                    #self.get_table().add_player(game.player.Player(name, player_socket))
+                    message = json.loads(player_socket[0].recv(Server.package_size))
+                    name = message['content']
+                    print 'New player: ' + name
+                    self.get_table().add_player(game.player.Player(name, player_socket))
 
                 elif s == sys.stdin:
                     command = sys.stdin.readline().rstrip('\n')
