@@ -208,6 +208,9 @@ angular.module('PokerMain', [
                     dt: new Date()
                 });
                 $scope.new_entry = '';
+
+                var objDiv = document.getElementById('scrollable');
+                objDiv.scrollTop = objDiv.scrollHeight;
             }
         };
 
