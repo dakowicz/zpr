@@ -82,6 +82,8 @@ angular.module('PokerMain', [
 
         $scope.is_hand_power_visible = false;
 
+        $scope.is_user_turn = false;
+
         $scope.player_name = [
             'popek', 'tomasz', 'maciej', 'popek', 'tomasz', 'maciej'
         ];
