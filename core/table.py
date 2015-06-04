@@ -35,8 +35,8 @@ class Table(threading.Thread):
                     message = player.get_input()
                 except Exception as msg:
                     print msg
-                    controller.pressed_leave(self, player);
-                    continue
+                    controller.pressed_leave(self, player)
+                    break
 
                 self.controller.serve_event(player, message['content'])
             for player in self.players:
@@ -85,6 +85,7 @@ class Table(threading.Thread):
             sends message to all players containing game state
         :return: nothing
         """
+        print 'notify'
         time.sleep(1)
         for player in self.players:
             try:
