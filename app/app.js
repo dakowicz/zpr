@@ -8,10 +8,6 @@ angular.module('PokerMain', [
 .controller('PokerCtrl', function($scope, $http){
         $scope.version = 0.6;
 
-        $http.get("http://www.w3schools.com/angular/customers.php")
-                .success(function(response) {
-                    $scope.names = response.records;
-            });
 
         //number of players
         $scope.players_nr = 6;
