@@ -381,14 +381,14 @@ body{
   /*All filters must be placed together*/
 
   position:absolute;
-  width:400px;
-  height: 600px;
+  width:450px;
+  height: 700px;
   font-size: 15px;
 
   text-align: center;
   color: white;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-  left:900px;
+  left:850px;
   top:5px;
 }
 
@@ -396,12 +396,4 @@ body{
   overflow-y: scroll;
   height: 70%;
   padding: 20px;
-}
-
-.type_panel {
-
-}
-
-.entry_table {
-  margin: 20px;
 }
