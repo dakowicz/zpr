@@ -31,7 +31,13 @@ class Table(threading.Thread):
         while not self.started:
             players_with_ready_input = self.__select_players()
             for player in players_with_ready_input:
-                message = player.get_input()
+                try:
+                    message = player.get_input()
+                except Exception as msg:
+                    print msg
+                    controller.pressed_leave(self, player);
+                    continue
+
                 self.controller.serve_event(player, message['content'])
             for player in self.players:
                 if not player.ready and player.arrival_time + 150 < time.time():
