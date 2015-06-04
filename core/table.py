@@ -31,6 +31,7 @@ class Table(threading.Thread):
         """
         while not self.started:
             if self.killed:
+                print 'Game ended'
                 return
             players_with_ready_input = self.__select_players()
             for player in players_with_ready_input:
@@ -93,6 +94,7 @@ class Table(threading.Thread):
         for player in self.players:
             try:
                 if not player.leaving:
+                    print 'send'
                     player.send(self.__dict(player))
             except socket.error:
                 controller.pressed_leave(self, player)

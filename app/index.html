@@ -205,8 +205,8 @@
 
 
                 try{
-
-                    var s = new WebSocket("ws://localhost:10000/");
+                    var flag = 1;
+                    var s = new WebSocket("ws://localhost:2000/");
 
                     s.onopen = function(e) {
 
@@ -221,20 +221,22 @@
                             s.send(JSON.stringify(p));
                             user_ready = 0;
                         }
-
-
                     };
-                    s.onclose = function(e) {
-                        console.log("closed");
+                    s.onerror = function(e) {
+
+                        console.log("error " + e.data);
                     };
                     s.onmessage = function(e) {
+                    console.log("getinput");
+                    console.log(e.data);
                         var msg = JSON.parse(e.data);
                         console.log(msg);
                     };
+
+
                 } catch (ex) {
                     console.log("connection exception:" + ex);
                 }
-
 
 
 //                var p = {

@@ -12,7 +12,7 @@ class Server:
 
     def __init__(self):
         self.host = ''
-        self.port = 10000
+        self.port = 2000
         self.backlog = 5
         self.server = None
         self.tables = []
@@ -55,6 +55,9 @@ class Server:
                         print 'Command \'' + command + '\' not known'
 
         self.server.close()
+        for table in self.tables:
+            table.killed = True
+            table.join()
         print 'Server closed'
 
     def open_socket(self):

@@ -3,6 +3,7 @@ import game
 import hand
 import select
 import time
+import struct
 import core.websocket
 from core.server import Server
 
@@ -47,13 +48,29 @@ class Player:
                 break
         return input_ready
 
+    def send_message(self, message):
+        result = ""
+        result += chr(129)
+        length = len(message)
+        if length <= 125:
+            result += chr(length)
+        elif length >= 126 and length <= 65535:
+            result += str(126)
+            result += struct.pack(">H", length)
+        else:
+            result += str(127)
+            result += struct.pack(">Q", length)
+        result += message
+        self.socket.send(result)
+
     def send(self, message):
         """
             send data to client
         :param message: primary type (dictionary)
         :return: nothing
         """
-        self.socket.send(json.dumps(message))
+        #self.socket.send(json.dumps(message))
+        self.send_message(json.dumps(message))
 
     def add_to_pot(self, value):
         """
