@@ -176,7 +176,7 @@ body{
 
 #seat3 .bet {
   left:30px;
-  top:-20px;
+  top:-40px;
 }
 
 #seat4 {
@@ -185,7 +185,7 @@ body{
 }
 #seat4 .bet {
   left:80px;
-  top:-20px;
+  top:-40px;
 }
 
 #seat5 {
@@ -194,7 +194,7 @@ body{
 }
 
 #seat5 .bet {
-  left:155px;
+  left:135px;
   top:75px;
 }
 

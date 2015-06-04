@@ -196,28 +196,37 @@
             <!-- script receiving/sending data to server -->
             <script>
 
-                var p = {
-                    content: "tomcio"
-                };
-                console.log(p);
+
 
                 window.onload = function() {
                     var s = new WebSocket("ws://localhost:10000/");
-                    var kod = JSON.stringify(p);
-
-                    console.log(kod);
-
-                    s.onopen = function(e) {
-                        s.send(kod);
-                        console.log("opened");
-                    };
-                    s.onclose = function(e) {
-                        console.log("closed");
-                    };
-                    s.onmessage = function(e) {
-                        console.log("got: " + e.data);
-                    };
+                    s.onopen = function(e) { alert("opened"); }
+                    s.onclose = function(e) { alert("closed"); }
+                    s.onmessage = function(e) { alert("got: " + e.data); }
                 };
+
+//                var p = {
+//                    content: "tomcio"
+//                };
+//                console.log(p);
+//
+//                window.onload = function() {
+//                    var s = new WebSocket("ws://localhost:10000/");
+//                    var kod = JSON.stringify(p);
+//
+//                    console.log(kod);
+//
+//                    s.onopen = function(e) {
+//                        s.send(kod);
+//                        console.log("opened");
+//                    };
+//                    s.onclose = function(e) {
+//                        console.log("closed");
+//                    };
+//                    s.onmessage = function(e) {
+//                        console.log("got: " + e.data);
+//                    };
+//                };
 
 
 

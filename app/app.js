@@ -105,6 +105,10 @@ angular.module('PokerMain', [
             1,2,3,4,5,6
         ];
 
+        $scope.player_bet = [
+            1,2,3,3,3,3
+        ];
+
         $scope.player_turn = {
 
         };
