@@ -13,45 +13,6 @@ def create_hash(key):
     return base64.b64encode(str(hash.digest()))
 
 
-def recv_data(client, length):
-    data = client.recv(length)
-    if not data: return data
-    return data.decode('utf-8', 'ignore')
-
-
-def send_data(client, data):
-    message = "\x00%s\xFF" % data.encode('utf-8')
-    return client.send(message)
-
-
-def parse_headers(data):
-    headers = {}
-    lines = data.splitlines()
-    for l in lines:
-        parts = l.split(": ", 1)
-        if len(parts) == 2:
-            headers[parts[0]] = parts[1]
-    headers['code'] = lines[len(lines) - 1]
-    return headers
-
-
-def handshake(client):
-    print 'Handshaking...'
-    data = client.recv(1024)
-    headers = parse_headers(data)
-    print 'Got headers:'
-    for k, v in headers.iteritems():
-        print k, ':', v
-
-    digest = create_hash(headers['Sec-WebSocket-Key'])
-    shake = "HTTP/1.1 101 Web Socket Protocol\r\n"
-    shake += "Upgrade: WebSocket\r\n"
-    shake += "Connection: Upgrade\r\n"
-    shake += "Sec-WebSocket-Accept: " + digest + "\r\n\r\n"
-
-    return client.send(shake)
-
-
 class Server:
     package_size = 1024
 
@@ -79,7 +40,7 @@ class Server:
             for s in input_ready:
                 if s == self.server:
                     player_socket = self.server.accept()
-                    handshake(player_socket[0])
+                    self.handshake(player_socket[0])
 
                     message = json.loads(player_socket[0].recv(Server.package_size))
                     name = message['content']
@@ -99,6 +60,29 @@ class Server:
         for table in self.tables:
             table.join()
         print 'Server closed'
+
+    def handshake(self, client):
+        print 'Handshaking...'
+        data = client.recv(1024)
+        headers = self.parse_headers(data)
+
+        digest = create_hash(headers['Sec-WebSocket-Key'])
+        shake = "HTTP/1.1 101 Web Socket Protocol\r\n"
+        shake += "Upgrade: WebSocket\r\n"
+        shake += "Connection: Upgrade\r\n"
+        shake += "Sec-WebSocket-Accept: " + digest + "\r\n\r\n"
+
+        return client.send(shake)
+
+    def parse_headers(self, data):
+        headers = {}
+        lines = data.splitlines()
+        for l in lines:
+            parts = l.split(": ", 1)
+            if len(parts) == 2:
+                headers[parts[0]] = parts[1]
+        headers['code'] = lines[len(lines) - 1]
+        return headers
 
     def open_socket(self):
         """
