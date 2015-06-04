@@ -41,7 +41,7 @@ class Server:
                         message = json.loads(websocket.recv_data(player_socket[0], Server.package_size))
                     except Exception as msg:
                         print msg
-                        continue
+                        break
 
                     name = message['content']
                     print 'New player: ' + name
@@ -57,8 +57,6 @@ class Server:
                         print 'Command \'' + command + '\' not known'
 
         self.server.close()
-        for table in self.tables:
-            table.join()
         print 'Server closed'
 
     def open_socket(self):
