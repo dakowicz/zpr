@@ -208,12 +208,15 @@
                     console.log(kod);
 
                     s.onopen = function(e) {
-                        alert("opened");
                         s.send(kod);
+                        console.log("opened");
                     };
-                    s.onclose = function(e) { alert("closed"); };
-                    s.onmessage = function(e) { alert("got: " + e.data);}
-                    console.log(s.readyState);
+                    s.onclose = function(e) {
+                        console.log("closed");
+                    };
+                    s.onmessage = function(e) {
+                        console.log("got: " + e.data);
+                    };
                 };
 
 
@@ -228,19 +231,19 @@
 //                {
 //                    // Web Socket is connected, send data using send()
 //                    gniazdo.send(JSON.stringify(data_to_send));
-//                    alert("Message is sent...");
+//                    console.log("Message is sent...");
 //                };
 //
 //                gniazdo.onmessage = function (evt)
 //                {
 //                    var received_msg = evt.data;
-//                    alert("Message is received...");
+//                    console.log("Message is received...");
 //                };
 //
 //                gniazdo.onclose = function()
 //                {
 //                    // websocket is closed.
-//                    alert("Connection is closed...");
+//                    console.log("Connection is closed...");
 //                };
 
 
