@@ -21,6 +21,7 @@ class Table(threading.Thread):
         self.started = False
         self.controller = controller.Controller(self)
         self.game = Game(self)
+        self.killed = False
 
     def run(self):
         """
@@ -29,6 +30,8 @@ class Table(threading.Thread):
         :return: nothing
         """
         while not self.started:
+            if self.killed:
+                return
             players_with_ready_input = self.__select_players()
             for player in players_with_ready_input:
                 try:
@@ -36,7 +39,7 @@ class Table(threading.Thread):
                 except Exception as msg:
                     print msg
                     controller.pressed_leave(self, player)
-                    break
+                    continue
 
                 self.controller.serve_event(player, message['content'])
             for player in self.players:

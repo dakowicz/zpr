@@ -39,13 +39,11 @@ class Server:
 
                     try:
                         message = json.loads(websocket.recv_data(player_socket[0], Server.package_size))
+                        name = message['content']
+                        print 'New player: ' + name
+                        self.get_table().add_player(game.player.Player(name, player_socket))
                     except Exception as msg:
                         print msg
-                        break
-
-                    name = message['content']
-                    print 'New player: ' + name
-                    self.get_table().add_player(game.player.Player(name, player_socket))
 
                 elif s == sys.stdin:
                     command = sys.stdin.readline().rstrip('\n')
@@ -102,6 +100,7 @@ class Server:
             table = self.tables[i]
             i += 1
             if table.is_empty():
+                table.killed = True
                 table.join()
                 self.tables.remove(table)
                 i -= 1
