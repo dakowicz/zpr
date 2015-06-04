@@ -28,7 +28,6 @@ def pressed_start(table, player):
 
     player.ready = True
     table.notify_players()
-    print 'pressed start'
 
 
 def pressed_leave(table, player):

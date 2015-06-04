@@ -12,7 +12,7 @@ class Server:
 
     def __init__(self):
         self.host = ''
-        self.port = 2000
+        self.port = 10000
         self.backlog = 5
         self.server = None
         self.tables = []

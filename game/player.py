@@ -55,11 +55,11 @@ class Player:
         if length <= 125:
             result += chr(length)
         elif length >= 126 and length <= 65535:
-            result += str(126)
-            result += struct.pack(">H", length)
+            result += chr(126)
+            result += str(struct.pack(">H", length))
         else:
-            result += str(127)
-            result += struct.pack(">Q", length)
+            result += chr(127)
+            result += str(struct.pack(">Q", length))
         result += message
         self.socket.send(result)
 
@@ -69,7 +69,6 @@ class Player:
         :param message: primary type (dictionary)
         :return: nothing
         """
-        #self.socket.send(json.dumps(message))
         self.send_message(json.dumps(message))
 
     def add_to_pot(self, value):
