@@ -191,7 +191,13 @@
 
         <div ng-show = "game_has_started" id="hand_power_panel">
             <label><input type="checkbox" ng-model = "is_hand_power_visible" >Player's winning odds</label>
-            <h3 ng-show = "is_hand_power_visible">Win: {{user_odds.win}}% Draw: {{user_odds.draw}}% Lose: {{user_odds.lose}}%</h3>
+            <div ng-show = "is_hand_power_visible">
+                <tr>
+                    <th >Win: {{user_odds.win}}%</th>
+                    <th >Draw: {{user_odds.draw}}%</th>
+                    <th >Loss: {{user_odds.loss}}%</th>
+                </tr>
+            </div>
         </div>
     </body>
 </html>
