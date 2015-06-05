@@ -74,21 +74,21 @@ angular.module('PokerMain', [])
 
 
         $scope.flop = [
-            $scope.back_of_card.first_card,
-            $scope.back_of_card.first_card,
-            $scope.back_of_card.first_card
+            {face: 'back', suit: 'card'},
+            {face: 'back', suit: 'card'},
+            {face: 'back', suit: 'card'}
             ];
         $scope.flop.is_visible = false;
 
         $scope.turn = {
-            face: $scope.back_of_card.first_card.face,
-            suit: $scope.back_of_card.first_card.suit
+            face: 'back',
+            suit: 'card'
         };
         $scope.turn.is_visible = false;
 
         $scope.river = {
-            face: $scope.back_of_card.first_card.face,
-            suit: $scope.back_of_card.first_card.suit
+            face: 'back',
+            suit: 'card'
         };
         $scope.river.is_visible = false;
 
@@ -329,14 +329,15 @@ angular.module('PokerMain', [])
         };
 
         $scope.setBet = function() {
-            if($scope.user_bet > 0 && $scope.user_bet < 9999  && socket.readyState === 1){
+            if($scope.user_bet > 0  && socket.readyState === 1 && $scope.user_bet > $scope.getMax()){
+                $scope.user_bet -= $scope.getMax();
                 $scope.sendResponse($scope.BET_COMMAND + " " + $scope.user_bet);
                 $scope.user_bet = '';
             }
         };
 
         $scope.setRaise = function() {
-            if($scope.user_bet.length > 0  && socket.readyState === 1) {
+            if($scope.user_bet.length > 0  && socket.readyState === 1 && $scope.user_bet > $scope.getMax()) {
                 $scope.sendResponse($scope.RAISE_COMMAND + " " + $scope.user_bet);
                 $scope.user_bet = '';
             }
@@ -385,17 +386,19 @@ angular.module('PokerMain', [])
 
                         //players' cards -> if 'None' then display back of the card (unknown state)
                         if (result[1] == 'None') {
-                            $scope.players_cards[i].first_card = $scope.back_of_card.first_card;
-                            $scope.players_cards[i].second_card = $scope.back_of_card.first_card;
+                            $scope.players_cards[i].first_card = {face: 'back', suit: 'card'};
+                            $scope.players_cards[i].second_card = {face: 'back', suit: 'card'};
                             $scope.is_card_visible[i] = false;
                             counter = 3;
                         } else {
                             $scope.players_cards[i].first_card.face = result[1];
                             $scope.players_cards[i].first_card.suit = result[2];
-                            $scope.players_cards[i].second_card.suit = result[3];
+                            $scope.players_cards[i].second_card.face = result[3];
                             $scope.players_cards[i].second_card.suit = result[4];
                             $scope.is_card_visible[i] = true;
                             counter = 5;
+
+                            console.log(result[1], result[2], result[3], result[4]);
                         }
 
                         //players' ready states
@@ -405,7 +408,8 @@ angular.module('PokerMain', [])
                         result[counter++].toLowerCase() == 'true' ? $scope.players_turn[i] = true : $scope.players_turn[i] = false;
 
                         //players' leaving states TO DO //////////////////////////////
-                        counter++;
+                        if(result[counter++].toLowerCase() == 'true')
+                            $scope.kickFromGame();
 
                         //players' stacks
                         $scope.players_stack[i] = Number(result[counter++]);
@@ -426,48 +430,53 @@ angular.module('PokerMain', [])
                         console.log($scope.players_cards[i].first_card, $scope.players_cards[i].second_card, $scope.is_players_ready[i], $scope.is_players_ready[i], $scope.players_stack[i], $scope.players_contribution[i], $scope.user_index);
                     }
                 }
+                result = '';
 
                 //board cards
                 if (new_data.table_card_0 == 'None') {
-                    $scope.flop[0] = $scope.back_of_card.first_card;
+                    $scope.flop[0] = {face: 'back', suit: 'card'};
+                    $scope.flop[1] = {face: 'back', suit: 'card'};
+                    $scope.flop[2] = {face: 'back', suit: 'card'};
                     $scope.flop.is_visible = false;
                 } else {
-                    $scope.flop[0].face = new_data.table_card_0.split[" "][0];
-                    $scope.flop[0].suit = new_data.table_card_0.split[" "][1];
                     $scope.flop.is_visible = true;
+
+                    result = new_data.table_card_0.split[" "];
+                    $scope.flop[0].face = result[0];
+                    $scope.flop[0].suit = result[1];
+
+                    result = new_data.table_card_1.split[" "];
+                    $scope.flop[1].face = result[0];
+                    $scope.flop[1].suit = result[1];
+
+                    result = new_data.table_card_2.split[" "];
+                    $scope.flop[2].face = result[0];
+                    $scope.flop[2].suit = result[1];
                 }
 
-                if (new_data.table_card_1 == 'None') {
-                    $scope.flop[1] = $scope.back_of_card.first_card;
-                } else {
-                    $scope.flop[1].face = new_data.table_card_1.split[" "][0];
-                    $scope.flop[1].suit = new_data.table_card_1.split[" "][1];
-                }
-
-                if (new_data.table_card_2 == 'None') {
-                    $scope.flop[2] = $scope.back_of_card.first_card;
-                } else {
-                    $scope.flop[2].face = new_data.table_card_2.split[" "][0];
-                    $scope.flop[2].suit = new_data.table_card_2.split[" "][1];
-                }
+                result = '';
 
                 if (new_data.table_card_3 == 'None') {
-                    $scope.turn.face = $scope.back_of_card.first_card.face;
-                    $scope.turn.suit = $scope.back_of_card.first_card.suit;
+                    $scope.turn.face = 'back';
+                    $scope.turn.suit = 'card';
                     $scope.turn.is_visible = false;
                 } else {
-                    $scope.turn.face = new_data.table_card_3.split[" "][0];
-                    $scope.turn.suit = new_data.table_card_3.split[" "][1];
+                    result = new_data.table_card_3.split[" "];
+                    $scope.turn.face = result[0];
+                    $scope.turn.suit = result[1];
                     $scope.turn.is_visible = true;
                 }
 
+                result = '';
+
                 if (new_data.table_card_4 == 'None') {
-                    $scope.river.face = $scope.back_of_card.first_card.face;
-                    $scope.river.suit = $scope.back_of_card.first_card.suit;
+                    $scope.river.face = 'back';
+                    $scope.river.suit = 'card';
                     $scope.river.is_visible = false;
                 } else {
-                    $scope.river.face = new_data.table_card_4.split[" "][0];
-                    $scope.river.suit = new_data.table_card_4.split[" "][1];
+                    result = new_data.table_card_4.split[" "];
+                    $scope.river.face = result[0];
+                    $scope.river.suit = result[1];
                     $scope.river.is_visible = true;
                 }
 
