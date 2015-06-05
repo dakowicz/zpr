@@ -179,14 +179,14 @@
             <button ng-click = setTurn() class="btn btn-primary">Turn</button>
 
 
-            <div ng-show = "is_user_turn" ng-controller = "PokerCtrl">
+            <div ng-show = "is_user_turn">
                 <input type="text"  ng-model="user_bet"  placeholder = "Type your bet/raise here" ng-minlength="1" ng-maxlength="4">
                 <button ng-click = "setBet()" class="btn btn-primary">Bet</button>
                 <button ng-click = "setRaise()" class="btn btn-primary">Raise</button>
             </div>
 
 
-            <div ng-show = "!is_logged" ng-controller = "PokerCtrl">
+            <div ng-show = "!is_logged">
                 <input type="text"  ng-model="user_login"  placeholder = "Type your login (max 10 chars)" >
                 <button ng-click = "setLogin()" class="btn btn-primary">Login</button>
             </div>

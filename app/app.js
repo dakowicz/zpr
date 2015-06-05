@@ -10,6 +10,8 @@ angular.module('PokerMain', [])
         var socket = new WebSocket("ws://localhost:10000/");
         //$scope.socket == undefined ? $scope.socket = new WebSocket("ws://localhost:10000/") : console.log("attempt to create connection");
 
+        console
+
         //setting up property watchers
 
         //command texts
@@ -102,7 +104,7 @@ angular.module('PokerMain', [])
         $scope.big_blind = -1;
         $scope.small_blind = -1;
 
-        $scope.game_has_started = true;
+        $scope.game_has_started = false;
 
         $scope.is_hand_power_visible = false;
 
