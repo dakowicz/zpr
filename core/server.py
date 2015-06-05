@@ -1,9 +1,7 @@
 import select
 import socket
 import sys
-import json
-import websocket
-import game.player
+import accept_player
 from core.table import Table
 
 
@@ -35,15 +33,7 @@ class Server:
                 if s == self.server:
                     player_socket = self.server.accept()
                     print 'Connection from ' + str(player_socket[1])
-                    websocket.handshake(player_socket[0])
-
-                    try:
-                        message = json.loads(websocket.recv_data(player_socket[0], Server.package_size))
-                        name = message['content']
-                        print 'New player: ' + name
-                        self.get_table().add_player(game.player.Player(name, player_socket))
-                    except Exception as msg:
-                        print msg
+                    accept_player.AcceptPlayer(self, player_socket).start()
 
                 elif s == sys.stdin:
                     command = sys.stdin.readline().rstrip('\n')
@@ -54,6 +44,7 @@ class Server:
                     else:
                         print 'Command \'' + command + '\' not known'
 
+        self.server.shutdown(socket.SHUT_RDWR)
         self.server.close()
         for table in self.tables:
             table.killed = True

@@ -8,10 +8,9 @@ from core.server import Server
 
 
 class Player:
-    def __init__(self, name, (socket, address)):
+    def __init__(self, name, socket):
         self.name = name
         self.socket = socket
-        self.address = address
         self.chips = game.Game.STARTING_CHIPS
         self.hand = hand.Hand()
         self.contribution = 0
