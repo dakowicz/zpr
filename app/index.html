@@ -17,102 +17,103 @@
     <body ng-controller = "PokerCtrl">
         <div id="poker_table" class="poker_table" data-uid="">
             {{is_players_visible[0]}}
-            <div ng-show = "is_players_visible[0]" id="seat1" class="seat">
+            {{game_has_started}}
+            <div ng-show = "is_players_visible[0]" slide-show-duration="2000" id="seat1" class="seat">
 
                 <div class="players_cards">
-                    <div ng-show = "game_has_started && is_card_visible[0]" class="card player_cards_first" ng-style="{'background-image': getImageLocation(players_cards[0].first_card.face, players_cards[0].first_card.suit)}"></div>
-                    <div ng-show = "game_has_started && is_card_visible[0]" class="card player_cards_second" ng-style="{'background-image': getImageLocation(players_cards[0].second_card.face, players_cards[0].second_card.suit)}"></div>
-                    <!--<div ng-show = "game_has_started && !is_card_visible[0]" class="card player_cards_first"></div>-->
-                    <!--<div ng-show = "game_has_started && !is_card_visible[0]" class="card player_cards_second"></div>-->
+                    <div ng-show = "game_has_started && is_card_visible[0]" class="card players_cards_first" ng-style="{'background-image': getImageLocation(players_cards[0].first_card.face, players_cards[0].first_card.suit)}"></div>
+                    <div ng-show = "game_has_started && is_card_visible[0]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[0].second_card.face, players_cards[0].second_card.suit)}"></div>
+                    <div ng-show = "game_has_started && !is_card_visible[0]" class="card players_cards_first"></div>
+                    <div ng-show = "game_has_started && !is_card_visible[0]" class="card players_cards_second"></div>
                 </div>
-                <div class="player_data">
+                <div class="players_data">
                     <div class="players_name" >{{players_name[0]}}</div>
-                    <div class="players_name" >Stack: ${{player_stack[0]}}</div>
+                    <div class="players_name" >Stack: ${{players_stack[0]}}</div>
                     <div ng-show = "game_has_started && dealer == 0" id = "dealer_button" class = "board_chips"></div>
                     <div ng-show = "game_has_started && big_blind == 0" id = "big_blind_button" class = "board_chips"></div>
                     <div ng-show = "game_has_started && small_blind == 0" id = "small_blind_button" class = "board_chips"></div>
                 </div>
-                <div ng-show = "player_bet[0]" class="bet">Player 1 bet</div>
+                <div ng-show = "players_bet[0]" class="bet">Player 1 bet</div>
             </div>
             <div ng-show = "is_players_visible[1]" id="seat2" class="seat">
                 <div class="players_cards">
-                    <div ng-show = "game_has_started && is_card_visible[1]" class="card player_cards_first" ng-style="{'background-image': getImageLocation(players_cards[1].first_card.face, players_cards[1].first_card.suit)}"></div>
-                    <div ng-show = "game_has_started && is_card_visible[1]" class="card player_cards_second" ng-style="{'background-image': getImageLocation(players_cards[1].second_card.face, players_cards[1].second_card.suit)}"></div>
-                    <!--<div ng-show = "game_has_started && !is_card_visible[1]" class="card player_cards_first"></div>-->
-                    <!--<div ng-show = "game_has_started && !is_card_visible[1]" class="card player_cards_second"></div>-->
+                    <div ng-show = "game_has_started && is_card_visible[1]" class="card players_cards_first" ng-style="{'background-image': getImageLocation(players_cards[1].first_card.face, players_cards[1].first_card.suit)}"></div>
+                    <div ng-show = "game_has_started && is_card_visible[1]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[1].second_card.face, players_cards[1].second_card.suit)}"></div>
+                    <div ng-show = "game_has_started && !is_card_visible[1]" class="card players_cards_first"></div>
+                    <div ng-show = "game_has_started && !is_card_visible[1]" class="card players_cards_second"></div>
                 </div>
-                <div class="player_data">
+                <div class="players_data">
                     <div class="players_name">{{players_name[1]}}</div>
-                    <div class="players_name">Stack: ${{player_stack[1]}}</div>
+                    <div class="players_name">Stack: ${{players_stack[1]}}</div>
                     <div ng-show = "game_has_started && dealer == 1" id = "dealer_button" class = "board_chips"></div>
                     <div ng-show = "game_has_started && big_blind == 1" id = "big_blind_button" class = "board_chips"></div>
                     <div ng-show = "game_has_started && small_blind == 1" id = "small_blind_button" class = "board_chips"></div>
                 </div>
-                <div ng-show = "player_bet[1]" class="bet">Player 2 bet</div>
+                <div ng-show = "players_bet[1]" class="bet">Player 2 bet</div>
             </div>
-            <!--<div ng-show = "players_name[2] != undefined" id="seat3" class="seat">-->
-                <!--<div class="players_cards">-->
-                    <!--<div ng-show = "game_has_started && is_card_visible[2]" class="card player_cards_first" ng-style="{'background-image': getImageLocation(players_cards[2].first_card.face, players_cards[2].first_card.suit)}"></div>-->
-                    <!--<div ng-show = "game_has_started && is_card_visible[2]" class="card player_cards_second" ng-style="{'background-image': getImageLocation(players_cards[2].second_card.face, players_cards[2].second_card.suit)}"></div>-->
-                    <!--<div ng-show = "game_has_started && !is_card_visible[2]" class="card player_cards_first"></div>-->
-                    <!--<div ng-show = "game_has_started && !is_card_visible[2]" class="card player_cards_second"></div>-->
-                <!--</div>-->
-                <!--<div class="player_data">-->
-                    <!--<div class="players_name">{{players_name[2]}}</div>-->
-                    <!--<div  class="players_name">Stack: ${{player_stack[2]}}</div>-->
-                    <!--<div ng-show = "game_has_started && dealer == 2" id = "dealer_button" class = "board_chips"></div>-->
-                    <!--<div ng-show = "game_has_started && big_blind == 2" id = "big_blind_button" class = "board_chips"></div>-->
-                    <!--<div ng-show = "game_has_started && small_blind == 2" id = "small_blind_button" class = "board_chips"></div>-->
-                <!--</div>-->
-                <!--<div ng-show = player_bet[2] class="bet">Player 3 bet</div>-->
-            <!--</div>-->
-            <!--<div ng-show = "players_name[3] != undefined" id="seat4" class="seat">-->
-                <!--<div class="players_cards">-->
-                    <!--<div ng-show = "game_has_started && is_card_visible[3]" class="card player_cards_first" ng-style="{'background-image': getImageLocation(players_cards[3].first_card.face, players_cards[3].first_card.suit)}"></div>-->
-                    <!--<div ng-show = "game_has_started && is_card_visible[3]" class="card player_cards_second" ng-style="{'background-image': getImageLocation(players_cards[3].second_card.face, players_cards[3].second_card.suit)}"></div>-->
-                    <!--<div ng-show = "game_has_started && !is_card_visible[3]" class="card player_cards_first"></div>-->
-                    <!--<div ng-show = "game_has_started && !is_card_visible[3]" class="card player_cards_second"></div>-->
-                <!--</div>-->
-                <!--<div class="player_data">-->
-                    <!--<div class="players_name">{{players_name[3]}}</div>-->
-                    <!--<div class="players_name">Stack: ${{player_stack[3]}}</div>-->
-                    <!--<div ng-show = "game_has_started && dealer == 3" id = "dealer_button" class = "board_chips"></div>-->
-                    <!--<div ng-show = "game_has_started && big_blind == 3" id = "big_blind_button" class = "board_chips"></div>-->
-                    <!--<div ng-show = "game_has_started && small_blind == 3" id = "small_blind_button" class = "board_chips"></div>-->
-                <!--</div>-->
-                <!--<div ng-show = player_bet[3] class="bet">Player 4 bet</div>-->
-            <!--</div>-->
-            <!--<div ng-show = "players_name[4] != undefined" id="seat5" class="seat">-->
-                <!--<div class="players_cards">-->
-                    <!--<div ng-show = "game_has_started && is_card_visible[4]" class="card player_cards_first" ng-style="{'background-image': getImageLocation(players_cards[4].first_card.face, players_cards[4].first_card.suit)}"></div>-->
-                    <!--<div ng-show = "game_has_started && is_card_visible[4]" class="card player_cards_second" ng-style="{'background-image': getImageLocation(players_cards[4].second_card.face, players_cards[4].second_card.suit)}"></div>-->
-                    <!--<div ng-show = "game_has_started && !is_card_visible[4]" class="card player_cards_first"></div>-->
-                    <!--<div ng-show = "game_has_started && !is_card_visible[4]" class="card player_cards_second"></div>-->
-                <!--</div>-->
-                <!--<div class="player_data">-->
-                    <!--<div class="players_name">{{players_name[4]}}</div>-->
-                    <!--<div class="players_name">Stack: ${{player_stack[4]}}</div>-->
-                    <!--<div ng-show = "game_has_started && dealer == 4" id = "dealer_button" class = "board_chips"></div>-->
-                    <!--<div ng-show = "game_has_started && big_blind == 4" id = "big_blind_button" class = "board_chips"></div>-->
-                    <!--<div ng-show = "game_has_started && small_blind == 4" id = "small_blind_button" class = "board_chips"></div>-->
-                <!--</div>-->
-                <!--<div ng-show = player_bet[4] class="bet">Player 5 bet</div>-->
-            <!--</div>-->
-            <!--<div ng-show = "players_name[5] != undefined" id="seat6" class="seat">-->
-                <!--<div class="players_cards">-->
-                    <!--<div ng-show = "game_has_started && is_card_visible[5]" class="card player_cards_first" ng-style="{'background-image': getImageLocation(players_cards[5].first_card.face, players_cards[5].first_card.suit)}"></div>-->
-                    <!--<div ng-show = "game_has_started && is_card_visible[5]" class="card player_cards_second" ng-style="{'background-image': getImageLocation(players_cards[5].second_card.face, players_cards[5].second_card.suit)}"></div>-->
-                    <!--<div ng-show = "game_has_started && !is_card_visible[5]" class="card player_cards_first"></div>-->
-                    <!--<div ng-show = "game_has_started && !is_card_visible[5]" class="card player_cards_second"></div>-->
-                <!--</div>-->
-                <!--<div class="player_data">-->
-                    <!--<div class="players_name">{{players_name[5]}}</div>-->
-                    <!--<div class="players_name">Stack: ${{player_stack[5]}}</div>-->
-                    <!--<div ng-show = "game_has_started && dealer == 5" id = "dealer_button" class = "board_chips"></div>-->
-                    <!--<div ng-show = "game_has_started && big_blind == 5" id = "big_blind_button" class = "board_chips"></div>-->
-                    <!--<div ng-show = "game_has_started && small_blind == 5" id = "small_blind_button" class = "board_chips"></div>-->
-                <!--</div>-->
-                <!--<div ng-show = player_is_bet[5] class="bet">Player 6 bet</div>-->
+            <div ng-show = "players_name[2] != undefined" id="seat3" class="seat">
+                <div class="players_cards">
+                    <div ng-show = "game_has_started && is_card_visible[2]" class="card players_cards_first" ng-style="{'background-image': getImageLocation(players_cards[2].first_card.face, players_cards[2].first_card.suit)}"></div>
+                    <div ng-show = "game_has_started && is_card_visible[2]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[2].second_card.face, players_cards[2].second_card.suit)}"></div>
+                    <div ng-show = "game_has_started && !is_card_visible[2]" class="card players_cards_first"></div>
+                    <div ng-show = "game_has_started && !is_card_visible[2]" class="card players_cards_second"></div>
+                </div>
+                <div class="players_data">
+                    <div class="players_name">{{players_name[2]}}</div>
+                    <div  class="players_name">Stack: ${{players_stack[2]}}</div>
+                    <div ng-show = "game_has_started && dealer == 2" id = "dealer_button" class = "board_chips"></div>
+                    <div ng-show = "game_has_started && big_blind == 2" id = "big_blind_button" class = "board_chips"></div>
+                    <div ng-show = "game_has_started && small_blind == 2" id = "small_blind_button" class = "board_chips"></div>
+                </div>
+                <div ng-show = players_bet[2] class="bet">Player 3 bet</div>
+            </div>
+            <div ng-show = "players_name[3] != undefined" id="seat4" class="seat">
+                <div class="players_cards">
+                    <div ng-show = "game_has_started && is_card_visible[3]" class="card players_cards_first" ng-style="{'background-image': getImageLocation(players_cards[3].first_card.face, players_cards[3].first_card.suit)}"></div>
+                    <div ng-show = "game_has_started && is_card_visible[3]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[3].second_card.face, players_cards[3].second_card.suit)}"></div>
+                    <div ng-show = "game_has_started && !is_card_visible[3]" class="card players_cards_first"></div>
+                    <div ng-show = "game_has_started && !is_card_visible[3]" class="card players_cards_second"></div>
+                </div>
+                <div class="players_data">
+                    <div class="players_name">{{players_name[3]}}</div>
+                    <div class="players_name">Stack: ${{players_stack[3]}}</div>
+                    <div ng-show = "game_has_started && dealer == 3" id = "dealer_button" class = "board_chips"></div>
+                    <div ng-show = "game_has_started && big_blind == 3" id = "big_blind_button" class = "board_chips"></div>
+                    <div ng-show = "game_has_started && small_blind == 3" id = "small_blind_button" class = "board_chips"></div>
+                </div>
+                <div ng-show = players_bet[3] class="bet">Player 4 bet</div>
+            </div>
+            <div ng-show = "players_name[4] != undefined" id="seat5" class="seat">
+                <div class="players_cards">
+                    <div ng-show = "game_has_started && is_card_visible[4]" class="card players_cards_first" ng-style="{'background-image': getImageLocation(players_cards[4].first_card.face, players_cards[4].first_card.suit)}"></div>
+                    <div ng-show = "game_has_started && is_card_visible[4]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[4].second_card.face, players_cards[4].second_card.suit)}"></div>
+                    <div ng-show = "game_has_started && !is_card_visible[4]" class="card players_cards_first"></div>
+                    <div ng-show = "game_has_started && !is_card_visible[4]" class="card players_cards_second"></div>
+                </div>
+                <div class="players_data">
+                    <div class="players_name">{{players_name[4]}}</div>
+                    <div class="players_name">Stack: ${{players_stack[4]}}</div>
+                    <div ng-show = "game_has_started && dealer == 4" id = "dealer_button" class = "board_chips"></div>
+                    <div ng-show = "game_has_started && big_blind == 4" id = "big_blind_button" class = "board_chips"></div>
+                    <div ng-show = "game_has_started && small_blind == 4" id = "small_blind_button" class = "board_chips"></div>
+                </div>
+                <div ng-show = players_bet[4] class="bet">Player 5 bet</div>
+            </div>
+            <div ng-show = "players_name[5] != undefined" id="seat6" class="seat">
+                <div class="players_cards">
+                    <div ng-show = "game_has_started && is_card_visible[5]" class="card players_cards_first" ng-style="{'background-image': getImageLocation(players_cards[5].first_card.face, players_cards[5].first_card.suit)}"></div>
+                    <div ng-show = "game_has_started && is_card_visible[5]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[5].second_card.face, players_cards[5].second_card.suit)}"></div>
+                    <div ng-show = "game_has_started && !is_card_visible[5]" class="card players_cards_first"></div>
+                    <div ng-show = "game_has_started && !is_card_visible[5]" class="card players_cards_second"></div>
+                </div>
+                <div class="players_data">
+                    <div class="players_name">{{players_name[5]}}</div>
+                    <div class="players_name">Stack: ${{players_stack[5]}}</div>
+                    <div ng-show = "game_has_started && dealer == 5" id = "dealer_button" class = "board_chips"></div>
+                    <div ng-show = "game_has_started && big_blind == 5" id = "big_blind_button" class = "board_chips"></div>
+                    <div ng-show = "game_has_started && small_blind == 5" id = "small_blind_button" class = "board_chips"></div>
+                </div>
+                <div ng-show = players_is_bet[5] class="bet">Player 6 bet</div>
             </div>
             <!-- blank spaces for board cards -->
             <div id="board">
@@ -167,14 +168,15 @@
         </div>
 
         <!-- buttons for user options during the game -->
-        <div ng-show = true id="action_options">
+        <div id="action_options">
             <!--<button ng-disabled = false ng-click = setSit(1) class="btn btn-success">Sit</button>-->
             <button ng-disabled = "stand.button_disabled" ng-click = setStand() class="btn btn-danger">Stand up</button>
-            <button ng-disabled = "ready.button_disabled" ng-click = setReady() class="btn btn-primary">Ready</button>
-            <button ng-disabled = "fold.button_disabled" ng-click = setFold() class="btn btn-primary">Fold</button>
-            <button ng-disabled = "call.button_disabled" ng-click = setCall() class="btn btn-primary" >Call</button>
-            <button ng-disabled = "check.button_disabled" ng-click = setCheck() class="btn btn-primary" >Check</button>
-            <button ng-disabled = "raise.button_disabled" ng-click = setRaise() class="btn btn-primary">Raise</button>
+            <!--<button ng-show = "!is_user_ready && is_logged" ng-disabled = "ready.button_disabled" ng-click = setReady() class="btn btn-primary">Ready</button>-->
+            <button ng-show = true ng-disabled = "ready.button_disabled" ng-click = setReady() class="btn btn-primary">Ready</button>
+            <button ng-show = "is_user_turn" ng-disabled = "fold.button_disabled" ng-click = setFold() class="btn btn-primary">Fold</button>
+            <button ng-show = "is_user_turn" ng-disabled = "call.button_disabled" ng-click = setCall() class="btn btn-primary" >Call</button>
+            <button ng-show = "is_user_turn" ng-disabled = "check.button_disabled" ng-click = setCheck() class="btn btn-primary" >Check</button>
+            <button ng-show = "is_user_turn" ng-disabled = "raise.button_disabled" ng-click = setRaise() class="btn btn-primary">Raise</button>
 
             <button ng-click = setTurn() class="btn btn-primary">Turn</button>
 

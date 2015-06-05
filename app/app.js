@@ -1,11 +1,18 @@
 
-'use strict';
+//'use strict';
 
 var socket = new WebSocket("ws://localhost:10000/");
 
-
 angular.module('PokerMain', [])
-    .controller('PokerCtrl', function($scope){
+    .controller('PokerCtrl', function($scope) {
+
+        //setting up a connection
+        //$scope.socket = undefined
+        //$scope.socket == undefined ? $scope.socket = new WebSocket("ws://localhost:10000/") : console.log("attempt to create connection");
+
+        $scope.socket = socket;
+
+        //setting up property watchers
 
         //command texts
         $scope.READY_COMMAND = 'start';         //made
@@ -16,10 +23,14 @@ angular.module('PokerMain', [])
         $scope.LEAVE_COMMAND = 'leave';
         $scope.CHECK_COMMAND = 'check';
 
-        $scope.socket = socket;
+        //max time for user's action
+        $scope.MAX_TIME = 130;
 
         //number of players
-        $scope.players_number = 0;
+        $scope.players_amount = 0;
+
+        //user's index
+        $scope.user_index = 0;
 
         //card prototype
         $scope.card = {
@@ -96,12 +107,16 @@ angular.module('PokerMain', [])
 
         $scope.is_hand_power_visible = false;
 
-        $scope.is_user_turn = false;
-
-        $scope.is_players_turn = [
+        $scope.players_turn = [
+            false, false, false, false, false, false
         ];
 
+        $scope.is_user_ready = false;
+
+        $scope.players_index_turn = 0;
+
         $scope.players_name = [
+            '', '', '', '', '', ''
         ];
 
         $scope.back_of_card = {
@@ -300,6 +315,7 @@ angular.module('PokerMain', [])
         };
 
         $scope.setReady = function (){
+            $scope.is_user_ready = true;
             $scope.sendResponse($scope.READY_COMMAND);
         };
 
@@ -313,14 +329,14 @@ angular.module('PokerMain', [])
         };
 
         $scope.setBet = function() {
-            if($scope.user_bet > 0 && $scope.user_bet < 9999){
+            if($scope.user_bet > 0 && $scope.user_bet < 9999  && $scope.socket.readyState === 1){
                 $scope.sendResponse($scope.BET_COMMAND + " " + $scope.user_bet);
                 $scope.user_bet = '';
             }
         };
 
         $scope.setRaise = function() {
-            if($scope.user_bet.length > 0) {
+            if($scope.user_bet.length > 0  && $scope.socket.readyState === 1) {
                 $scope.sendResponse($scope.RAISE_COMMAND + " " + $scope.user_bet);
                 $scope.user_bet = '';
             }
@@ -370,10 +386,10 @@ angular.module('PokerMain', [])
             var counter = 0;
 
             //number of players
-            $scope.players_number = new_data.players_number;
+            $scope.players_amount = new_data.players_amount;
 
             //updating players' attributes
-            for(var i = 0; i < $scope.players_number; ++i){
+            for(var i = 0; i < $scope.players_amount; ++i){
                 if(new_data[i]){
                     result = new_data[i].split(" ");
                     counter = 0;
@@ -381,8 +397,6 @@ angular.module('PokerMain', [])
                     //players' names
                     $scope.players_name[i] = result[0];
                     $scope.is_players_visible[i] = true;
-
-                    $scope.$apply();
 
                     console.log($scope.is_players_visible[i], i);
 
@@ -405,7 +419,7 @@ angular.module('PokerMain', [])
                     result[counter++].toLowerCase() == 'true' ? $scope.is_players_ready[i] = true : $scope.is_players_ready[i] = false;
 
                     //players' turn
-                    result[counter++].toLowerCase() == 'true' ? $scope.is_players_ready[i] = true : $scope.is_players_turn[i] = false;
+                    result[counter++].toLowerCase() == 'true' ? $scope.players_turn[i] = true : $scope.players_turn[i] = false;
 
                     //players' leaving states TO DO //////////////////////////////
                     counter++;
@@ -468,8 +482,8 @@ angular.module('PokerMain', [])
             //dealer's index
             if(new_data.dealer) {
                 $scope.dealer = new_data.dealer;
-                $scope.big_blind = ($scope.dealer + 2) % ($scope.players_number);
-                $scope.small_blind = ($scope.dealer + 1) % ($scope.players_number);
+                $scope.big_blind = ($scope.dealer + 2) % ($scope.players_amount);
+                $scope.small_blind = ($scope.dealer + 1) % ($scope.players_amount);
             }else {
                 $scope.dealer = 0;
                 $scope.big_blind = 0;
@@ -484,75 +498,19 @@ angular.module('PokerMain', [])
             //update the buttons
             $scope.checkButtons();
 
+            $scope.$apply();
         };
 
 
         //----------------- sending a response to server --------------
 
         $scope.sendResponse = function(key){
-            $scope.message_server.content = key;
-            console.log(key);
-            $scope.socket.send(JSON.stringify($scope.message_server));
+            //checking connection state
+            if($scope.socket.readyState === 1){
+                $scope.message_server.content = key;
+                console.log(key);
+                $scope.socket.send(JSON.stringify($scope.message_server));
+            }
         };
 
     });
-
-
-    //------------------------ watchers setting directive -------------
-    //.directive( "ng-show-new",
-    //function() {
-    //
-    //    // I allow an instance of the directive to be hooked
-    //    // into the user-interaction model outside of the
-    //    // AngularJS context.
-    //    function link( $scope, element, attributes ) {
-    //
-    //        // I am the TRUTHY expression to watch.
-    //        var expression = attributes;
-    //
-    //
-    //        // I check to see the default display of the
-    //        // element based on the link-time value of the
-    //        // model we are watching.
-    //
-    //        // I watch the expression in $scope context to
-    //        // see when it changes - and adjust the visibility
-    //        // of the element accordingly.
-    //        $scope.$watch(
-    //            expression,
-    //            function( newValue, oldValue ) {
-    //
-    //                console.log("nowa ", newValue);
-    //
-    //                // Ignore first-run values since we've
-    //                // already defaulted the element state.
-    //                if ( newValue === oldValue ) {
-    //
-    //                    return;
-    //
-    //                }
-    //
-    //                // Show element.
-    //                if ( newValue ) {
-    //
-    //                    element.show();
-    //
-    //                    // Hide element.
-    //                } else {
-    //
-    //                    element.hide();
-    //                }
-    //
-    //            }
-    //        );
-    //
-    //    }
-    //
-    //
-    //    // Return the directive configuration.
-    //    return({
-    //        link: link,
-    //        restrict: "A"
-    //    });
-    //
-    //});
