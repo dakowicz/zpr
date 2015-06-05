@@ -32,6 +32,7 @@
                     <div ng-show = "game_has_started && dealer == 0" id = "dealer_button" class = "board_chips"></div>
                     <div ng-show = "game_has_started && big_blind == 0" id = "big_blind_button" class = "board_chips"></div>
                     <div ng-show = "game_has_started && small_blind == 0" id = "small_blind_button" class = "board_chips"></div>
+                    <div ng-show = "game_has_started && players_turn[0]" id = "players_turn" class = "board_chips"></div>
                 </div>
                 <div ng-show = players_contribution[0] class="bet">${{players_contribution[0]}}</div>
             </div>
@@ -48,6 +49,7 @@
                     <div ng-show = "game_has_started && dealer == 1" id = "dealer_button" class = "board_chips"></div>
                     <div ng-show = "game_has_started && big_blind == 1" id = "big_blind_button" class = "board_chips"></div>
                     <div ng-show = "game_has_started && small_blind == 1" id = "small_blind_button" class = "board_chips"></div>
+                    <div ng-show = "game_has_started && players_turn[1]" id = "players_turn" class = "board_chips"></div>
                 </div>
                 <div ng-show = players_contribution[1] class="bet">${{players_contribution[1]}}</div>
             </div>
@@ -64,6 +66,7 @@
                     <div ng-show = "game_has_started && dealer == 2" id = "dealer_button" class = "board_chips"></div>
                     <div ng-show = "game_has_started && big_blind == 2" id = "big_blind_button" class = "board_chips"></div>
                     <div ng-show = "game_has_started && small_blind == 2" id = "small_blind_button" class = "board_chips"></div>
+                    <div ng-show = "game_has_started && players_turn[2]" id = "players_turn" class = "board_chips"></div>
                 </div>
                 <div ng-show = players_contribution[2] class="bet">${{players_contribution[2]}}</div>
             </div>
@@ -73,6 +76,7 @@
                     <div ng-show = "game_has_started && is_card_visible[3]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[3].second_card.face, players_cards[3].second_card.suit)}"></div>
                     <div ng-show = "game_has_started && !is_card_visible[3]" class="card players_cards_first"></div>
                     <div ng-show = "game_has_started && !is_card_visible[3]" class="card players_cards_second"></div>
+                    <div ng-show = "game_has_started && players_turn[3]" id = "players_turn" class = "board_chips"></div>
                 </div>
                 <div class="players_data">
                     <div class="players_name">{{players_name[3]}}</div>
@@ -89,6 +93,7 @@
                     <div ng-show = "game_has_started && is_card_visible[4]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[4].second_card.face, players_cards[4].second_card.suit)}"></div>
                     <div ng-show = "game_has_started && !is_card_visible[4]" class="card players_cards_first"></div>
                     <div ng-show = "game_has_started && !is_card_visible[4]" class="card players_cards_second"></div>
+                    <div ng-show = "game_has_started && players_turn[4]" id = "players_turn" class = "board_chips"></div>
                 </div>
                 <div class="players_data">
                     <div class="players_name">{{players_name[4]}}</div>
@@ -105,6 +110,7 @@
                     <div ng-show = "game_has_started && is_card_visible[5]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[5].second_card.face, players_cards[5].second_card.suit)}"></div>
                     <div ng-show = "game_has_started && !is_card_visible[5]" class="card players_cards_first"></div>
                     <div ng-show = "game_has_started && !is_card_visible[5]" class="card players_cards_second"></div>
+                    <div ng-show = "game_has_started && players_turn[5]" id = "players_turn" class = "board_chips"></div>
                 </div>
                 <div class="players_data">
                     <div class="players_name">{{players_name[5]}}</div>
@@ -167,22 +173,16 @@
 
         <!-- buttons for user options during the game -->
         <div id="action_options">
-            <!--<button ng-disabled = false ng-click = setSit(1) class="btn btn-success">Sit</button>-->
             <button ng-disabled = "stand.button_disabled" ng-click = setStand() class="btn btn-danger">Stand up</button>
-            <button ng-disabled = "ready.button_disabled" ng-click = setReady() class="btn btn-primary">Ready</button>
-            <!--<button ng-disabled = "ready.button_disabled" ng-click = setReady() class="btn btn-primary">Ready</button>-->
+            <button ng-show = "is_logged && !is_user_ready" ng-disabled = "ready.button_disabled" ng-click = setReady() class="btn btn-primary">Ready</button>
             <button ng-show = "is_user_turn && game_has_started" ng-disabled = "fold.button_disabled" ng-click = setFold() class="btn btn-primary">Fold</button>
             <button ng-show = "is_user_turn && game_has_started" ng-disabled = "call.button_disabled" ng-click = setCall() class="btn btn-primary" >Call</button>
-            <button ng-show = "is_user_turn && game_has_started" ng-disabled = "check.button_disabled" ng-click = setCheck() class="btn btn-primary" >Check</button>
-            <button ng-show = "is_user_turn && game_has_started" ng-disabled = "raise.button_disabled" ng-click = setRaise() class="btn btn-primary">Raise</button>
-
-            <!--<button ng-click = setTurn() class="btn btn-primary">Turn</button>-->
-
+            <button ng-show = "is_user_turn && game_has_started" ng-disabled = "check.button_disabled" ng-click = setCheck() class="btn btn-success" >Check</button>
 
             <div ng-show = "is_user_turn">
                 <input type="text"  ng-model="user_bet"  placeholder = "Type your bet/raise here" ng-minlength="1" ng-maxlength="4">
-                <button ng-click = "setBet()" class="btn btn-primary">Bet</button>
-                <button ng-click = "setRaise()" class="btn btn-primary">Raise</button>
+                <button ng-click = "setBet()" class="btn btn-warning">Bet</button>
+                <button ng-click = "setRaise()" class="btn btn-warning">Raise</button>
             </div>
 
 

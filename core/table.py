@@ -145,8 +145,8 @@ class Table(threading.Thread):
         :return: dictionary
         """
         dictionary = {
-            'players_number': len(self.players),
-            'game_started': self.started,
+            'playersnumber': len(self.players),
+            'gamestarted': self.started,
             'index': self.players.index(player),
             'win': player.win_probability,
             'draw': player.draw_probability,
@@ -164,9 +164,9 @@ class Table(threading.Thread):
 
         i = 0
         while i < 5:
-            dictionary['table_card_' + str(i)] = 'None'
+            dictionary['tablecard' + str(i)] = 'None'
             if i < len(self.game.tableCards):
-                dictionary['table_card_' + str(i)] = str(self.game.tableCards[i])
+                dictionary['tablecard' + str(i)] = str(self.game.tableCards[i])
             i += 1
 
         if self.game.dealer is not None:

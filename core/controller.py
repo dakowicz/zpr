@@ -165,8 +165,6 @@ def can_bet(table, player, value):
         return False
     elif player.chips == value:
         return True
-    elif value < table.game.bigBlind:
-        return False
     else:
         return True
 
@@ -197,8 +195,6 @@ def can_raise(table, player, value):
         return False
     elif table.game.max_contribution() - player.contribution + value == player.chips:
         return True
-    elif value < table.game.bigBlind:
-        return False
     else:
         return True
 
