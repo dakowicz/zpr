@@ -246,8 +246,6 @@ class Game:
             else:
                 break
 
-        for player in winners:
-            print player.name
         return winners
 
     def calculate_probability(self):

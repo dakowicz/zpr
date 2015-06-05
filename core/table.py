@@ -31,8 +31,8 @@ class Table(threading.Thread):
         """
         while not self.started:
             if self.killed:
-                print 'Thread killed'
                 return
+
             players_with_ready_input = self.__select_players()
             for player in players_with_ready_input:
                 try:
@@ -43,14 +43,19 @@ class Table(threading.Thread):
                     continue
 
                 self.controller.serve_event(player, message['content'])
+
             for player in self.players:
                 if not player.ready and player.arrival_time + 150 < time.time():
                     self.remove_player(player)
                     print 'Player ' + player.name + ' removed - waited too long.'
+
             if controller.can_start_game(self):
                 self.started = True
 
-        self.game.game_loop()
+        try:
+            self.game.game_loop()
+        except Exception as msg:
+            print msg
         print 'Game ended'
 
     def add_player(self, player):
