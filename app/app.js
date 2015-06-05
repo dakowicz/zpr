@@ -1,22 +1,22 @@
 
 //'use strict';
 
-var socket = new WebSocket("ws://localhost:10000/");
+//var socket = new WebSocket("ws://localhost:10000/");
 
 angular.module('PokerMain', [])
     .controller('PokerCtrl', function($scope) {
 
         //setting up a connection
+        $scope.socket =  new WebSocket("ws://localhost:10000/");
+
         //$scope.socket = undefined
         //$scope.socket == undefined ? $scope.socket = new WebSocket("ws://localhost:10000/") : console.log("attempt to create connection");
-
-        $scope.socket = socket;
 
         //setting up property watchers
 
         //command texts
-        $scope.READY_COMMAND = 'start';         //made
-        $scope.CALL_COMMAND = 'call';           //made
+        $scope.READY_COMMAND = 'start';
+        $scope.CALL_COMMAND = 'call';
         $scope.BET_COMMAND = 'bet';
         $scope.RAISE_COMMAND = 'raise';
         $scope.FOLD_COMMAND = 'fold';
@@ -72,6 +72,15 @@ angular.module('PokerMain', [])
         //------------------- cards on the center: flop, river, turn ---
         //values
 
+        //$scope.$watch('players_name[0]', function(newVal, oldVal){
+        //    if(newVal != oldVal){
+        //        $scope.players_name[0] = newVal;
+        //        $scope.is_players_visible[0] = true;
+        //    }
+        //
+        //});
+
+
         $scope.flop = [
             $scope.back_of_card.first_card,
             $scope.back_of_card.first_card,
@@ -99,11 +108,11 @@ angular.module('PokerMain', [])
             false, false, false, false, false, false
         ];
 
-        $scope.dealer = 0;
-        $scope.big_blind = 0;
-        $scope.small_blind = 0;
+        $scope.dealer = -1;
+        $scope.big_blind = -1;
+        $scope.small_blind = -1;
 
-        $scope.game_has_started = false;
+        $scope.game_has_started = true;
 
         $scope.is_hand_power_visible = false;
 
@@ -357,6 +366,143 @@ angular.module('PokerMain', [])
             }
         };
 
+        //----------------- updating data -----------------------------
+        $scope.update = function (new_data){
+
+            $scope.$apply( function() {
+
+                //temp
+                var result = '';
+                var counter = 0;
+
+                //number of players
+                $scope.players_amount = Number(new_data.players_number);
+
+                //updating players' attributes
+                for (var i = 0; i < $scope.players_amount; ++i) {
+                    if (new_data[i]) {
+                        result = new_data[i].split(" ");
+                        counter = 0;
+
+                        //players' names
+                        $scope.players_name[i] = result[0];
+                        $scope.is_players_visible[i] = true;
+
+                        console.log("widoczny", $scope.is_players_visible[i]);
+
+                        //players' cards -> if 'None' then display back of the card (unknown state)
+                        if (result[1] == 'None') {
+                            $scope.players_cards[i].first_card = $scope.back_of_card.first_card;
+                            $scope.players_cards[i].second_card = $scope.back_of_card.first_card;
+                            $scope.is_card_visible[i] = false;
+                            counter = 3;
+                        } else {
+                            $scope.players_cards[i].first_card.face = result[1];
+                            $scope.players_cards[i].first_card.suit = result[2];
+                            $scope.players_cards[i].second_card.suit = result[3];
+                            $scope.players_cards[i].second_card.suit = result[4];
+                            $scope.is_card_visible[i] = true;
+                            counter = 5;
+                        }
+
+                        //players' ready states
+                        result[counter++].toLowerCase() == 'true' ? $scope.is_players_ready[i] = true : $scope.is_players_ready[i] = false;
+
+                        //players' turn
+                        result[counter++].toLowerCase() == 'true' ? $scope.players_turn[i] = true : $scope.players_turn[i] = false;
+
+                        //players' leaving states TO DO //////////////////////////////
+                        counter++;
+
+                        //players' stacks
+                        $scope.players_stack[i] = Number(result[counter++]);
+
+                        //players' latest contribution to pot
+                        $scope.players_contribution[i] = Number(result[counter++]);
+                        if ($scope.players_contribution[i])
+                            $scope.game_has_started = true;
+
+                        //user's index on the table
+                        $scope.user_index = Number(new_data.index);
+
+                        if ($scope.players_turn[$scope.user_index] === true)
+                            $scope.is_user_turn = true;
+                        else
+                            $scope.is_user_turn = false;
+
+                        console.log($scope.players_cards[i].first_card, $scope.players_cards[i].second_card, $scope.is_players_ready[i], $scope.is_players_ready[i], $scope.players_stack[i], $scope.players_contribution[i], $scope.user_index);
+                    }
+                }
+
+                //board cards
+                if (new_data.table_card_0 == 'None') {
+                    $scope.flop[0] = $scope.back_of_card.first_card;
+                    $scope.flop.is_visible = false;
+                } else {
+                    $scope.flop[0].face = new_data.table_card_0.split[" "][0];
+                    $scope.flop[0].suit = new_data.table_card_0.split[" "][1];
+                    $scope.flop.is_visible = true;
+                }
+
+                if (new_data.table_card_1 == 'None') {
+                    $scope.flop[1] = $scope.back_of_card.first_card;
+                } else {
+                    $scope.flop[1].face = new_data.table_card_1.split[" "][0];
+                    $scope.flop[1].suit = new_data.table_card_1.split[" "][1];
+                }
+
+                if (new_data.table_card_2 == 'None') {
+                    $scope.flop[2] = $scope.back_of_card.first_card;
+                } else {
+                    $scope.flop[2].face = new_data.table_card_2.split[" "][0];
+                    $scope.flop[2].suit = new_data.table_card_2.split[" "][1];
+                }
+
+                if (new_data.table_card_3 == 'None') {
+                    $scope.turn.face = $scope.back_of_card.first_card.face;
+                    $scope.turn.suit = $scope.back_of_card.first_card.suit;
+                    $scope.turn.is_visible = false;
+                } else {
+                    $scope.turn.face = new_data.table_card_3.split[" "][0];
+                    $scope.turn.suit = new_data.table_card_3.split[" "][1];
+                    $scope.turn.is_visible = true;
+                }
+
+                if (new_data.table_card_4 == 'None') {
+                    $scope.river.face = $scope.back_of_card.first_card.face;
+                    $scope.river.suit = $scope.back_of_card.first_card.suit;
+                    $scope.river.is_visible = false;
+                } else {
+                    $scope.river.face = new_data.table_card_4.split[" "][0];
+                    $scope.river.suit = new_data.table_card_4.split[" "][1];
+                    $scope.river.is_visible = true;
+                }
+
+                //dealer's index
+                if (new_data.dealer != null) {
+                    $scope.dealer = new_data.dealer;
+                    $scope.big_blind = ($scope.dealer + 2) % ($scope.players_amount);
+                    $scope.small_blind = ($scope.dealer + 1) % ($scope.players_amount);
+                } else {
+                    $scope.dealer = -1;
+                    $scope.big_blind = -1;
+                    $scope.small_blind = -1;
+                }
+
+                //winning odds
+                $scope.user_odds.win = new_data.win;
+                $scope.user_odds.draw = new_data.draw;
+                $scope.user_odds.lose = new_data.lose;
+
+                //update the buttons
+                console.log("apply");
+
+                $scope.checkButtons();
+            })
+
+        };
+
+
         //----------------- server connection -------------------------
 
         $scope.message_server = {
@@ -375,130 +521,6 @@ angular.module('PokerMain', [])
 
         $scope.socket.onclose = function(e) {
             console.log("closed");
-        };
-
-
-        //----------------- updating data -----------------------------
-        $scope.update = function (new_data){
-
-            //temp
-            var result = '';
-            var counter = 0;
-
-            //number of players
-            $scope.players_amount = new_data.players_amount;
-
-            //updating players' attributes
-            for(var i = 0; i < $scope.players_amount; ++i){
-                if(new_data[i]){
-                    result = new_data[i].split(" ");
-                    counter = 0;
-
-                    //players' names
-                    $scope.players_name[i] = result[0];
-                    $scope.is_players_visible[i] = true;
-
-                    console.log($scope.is_players_visible[i], i);
-
-                    //players' cards -> if 'None' then display back of the card (unknown state)
-                    if(result[1] == 'None'){
-                        $scope.players_cards[i].first_card = $scope.back_of_card.first_card;
-                        $scope.players_cards[i].second_card = $scope.back_of_card.first_card;
-                        $scope.is_card_visible[i] = false;
-                        counter = 3;
-                    }else{
-                        $scope.players_cards[i].first_card.face = result[1];
-                        $scope.players_cards[i].first_card.suit = result[2];
-                        $scope.players_cards[i].second_card.suit = result[3];
-                        $scope.players_cards[i].second_card.suit = result[4];
-                        $scope.is_card_visible[i] = true;
-                        counter = 5;
-                    }
-
-                    //players' ready states
-                    result[counter++].toLowerCase() == 'true' ? $scope.is_players_ready[i] = true : $scope.is_players_ready[i] = false;
-
-                    //players' turn
-                    result[counter++].toLowerCase() == 'true' ? $scope.players_turn[i] = true : $scope.players_turn[i] = false;
-
-                    //players' leaving states TO DO //////////////////////////////
-                    counter++;
-
-                    //players' stacks
-                    $scope.players_stack[i] = Number(result[counter++]);
-
-                    $scope.players_contribution[i] = Number(result[counter++]);
-                    if($scope.players_contribution[i])
-                        $scope.game_has_started = true;
-
-                    console.log($scope.players_cards[i].first_card, $scope.players_cards[i].second_card,  $scope.is_players_ready[i], $scope.is_players_ready[i], $scope.players_stack[i], $scope.players_contribution[i]);
-                }
-            }
-
-            //board cards
-            if(new_data.table_card_0 == 'None'){
-                $scope.flop[0] = $scope.back_of_card.first_card;
-                $scope.flop.is_visible = false;
-            }else{
-                $scope.flop[0].face = new_data.table_card_0.split[" "][0];
-                $scope.flop[0].suit = new_data.table_card_0.split[" "][1];
-                $scope.flop.is_visible = true;
-            }
-
-            if(new_data.table_card_1 == 'None'){
-                $scope.flop[1] = $scope.back_of_card.first_card;
-            }else{
-                $scope.flop[1].face = new_data.table_card_1.split[" "][0];
-                $scope.flop[1].suit = new_data.table_card_1.split[" "][1];
-            }
-
-            if(new_data.table_card_2 == 'None'){
-                $scope.flop[2] = $scope.back_of_card.first_card;
-            }else{
-                $scope.flop[2].face = new_data.table_card_2.split[" "][0];
-                $scope.flop[2].suit = new_data.table_card_2.split[" "][1];
-            }
-
-            if(new_data.table_card_3 == 'None'){
-                $scope.turn.face = $scope.back_of_card.first_card.face;
-                $scope.turn.suit = $scope.back_of_card.first_card.suit;
-                $scope.turn.is_visible = false;
-            }else{
-                $scope.turn.face = new_data.table_card_3.split[" "][0];
-                $scope.turn.suit = new_data.table_card_3.split[" "][1];
-                $scope.turn.is_visible = true;
-            }
-
-            if(new_data.table_card_4 == 'None'){
-                $scope.river.face = $scope.back_of_card.first_card.face;
-                $scope.river.suit = $scope.back_of_card.first_card.suit;
-                $scope.river.is_visible = false;
-            }else{
-                $scope.river.face = new_data.table_card_4.split[" "][0];
-                $scope.river.suit = new_data.table_card_4.split[" "][1];
-                $scope.river.is_visible = true;
-            }
-
-            //dealer's index
-            if(new_data.dealer) {
-                $scope.dealer = new_data.dealer;
-                $scope.big_blind = ($scope.dealer + 2) % ($scope.players_amount);
-                $scope.small_blind = ($scope.dealer + 1) % ($scope.players_amount);
-            }else {
-                $scope.dealer = 0;
-                $scope.big_blind = 0;
-                $scope.small_blind = 0;
-            }
-
-            //winning odds
-            $scope.user_odds.win = new_data.win;
-            $scope.user_odds.draw = new_data.draw;
-            $scope.user_odds.lose = new_data.lose;
-
-            //update the buttons
-            $scope.checkButtons();
-
-            $scope.$apply();
         };
 
 

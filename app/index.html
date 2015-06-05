@@ -18,7 +18,7 @@
         <div id="poker_table" class="poker_table" data-uid="">
             {{is_players_visible[0]}}
             {{game_has_started}}
-            <div ng-show = "is_players_visible[0]" slide-show-duration="2000" id="seat1" class="seat">
+            <div ng-show = "is_players_visible[0]" id="seat1" class="seat">
 
                 <div class="players_cards">
                     <div ng-show = "game_has_started && is_card_visible[0]" class="card players_cards_first" ng-style="{'background-image': getImageLocation(players_cards[0].first_card.face, players_cards[0].first_card.suit)}"></div>
@@ -51,7 +51,7 @@
                 </div>
                 <div ng-show = "players_bet[1]" class="bet">Player 2 bet</div>
             </div>
-            <div ng-show = "players_name[2] != undefined" id="seat3" class="seat">
+            <div ng-show = "is_players_visible[2]" id="seat3" class="seat">
                 <div class="players_cards">
                     <div ng-show = "game_has_started && is_card_visible[2]" class="card players_cards_first" ng-style="{'background-image': getImageLocation(players_cards[2].first_card.face, players_cards[2].first_card.suit)}"></div>
                     <div ng-show = "game_has_started && is_card_visible[2]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[2].second_card.face, players_cards[2].second_card.suit)}"></div>
@@ -67,7 +67,7 @@
                 </div>
                 <div ng-show = players_bet[2] class="bet">Player 3 bet</div>
             </div>
-            <div ng-show = "players_name[3] != undefined" id="seat4" class="seat">
+            <div ng-show = "is_players_visible[3]" id="seat4" class="seat">
                 <div class="players_cards">
                     <div ng-show = "game_has_started && is_card_visible[3]" class="card players_cards_first" ng-style="{'background-image': getImageLocation(players_cards[3].first_card.face, players_cards[3].first_card.suit)}"></div>
                     <div ng-show = "game_has_started && is_card_visible[3]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[3].second_card.face, players_cards[3].second_card.suit)}"></div>
@@ -83,7 +83,7 @@
                 </div>
                 <div ng-show = players_bet[3] class="bet">Player 4 bet</div>
             </div>
-            <div ng-show = "players_name[4] != undefined" id="seat5" class="seat">
+            <div ng-show = "is_players_visible[4]" id="seat5" class="seat">
                 <div class="players_cards">
                     <div ng-show = "game_has_started && is_card_visible[4]" class="card players_cards_first" ng-style="{'background-image': getImageLocation(players_cards[4].first_card.face, players_cards[4].first_card.suit)}"></div>
                     <div ng-show = "game_has_started && is_card_visible[4]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[4].second_card.face, players_cards[4].second_card.suit)}"></div>
@@ -99,7 +99,7 @@
                 </div>
                 <div ng-show = players_bet[4] class="bet">Player 5 bet</div>
             </div>
-            <div ng-show = "players_name[5] != undefined" id="seat6" class="seat">
+            <div ng-show = "is_players_visible[5]" id="seat6" class="seat">
                 <div class="players_cards">
                     <div ng-show = "game_has_started && is_card_visible[5]" class="card players_cards_first" ng-style="{'background-image': getImageLocation(players_cards[5].first_card.face, players_cards[5].first_card.suit)}"></div>
                     <div ng-show = "game_has_started && is_card_visible[5]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[5].second_card.face, players_cards[5].second_card.suit)}"></div>
