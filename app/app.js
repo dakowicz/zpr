@@ -1,15 +1,13 @@
 
-//'use strict';
+'use strict';
 
 //var socket = new WebSocket("ws://localhost:10000/");
 
 angular.module('PokerMain', [])
-    .controller('PokerCtrl', function($scope) {
+    .controller('PokerCtrl', ["$scope", function($scope) {
 
         //setting up a connection
-        $scope.socket =  new WebSocket("ws://localhost:10000/");
-
-        //$scope.socket = undefined
+        var socket = new WebSocket("ws://localhost:10000/");
         //$scope.socket == undefined ? $scope.socket = new WebSocket("ws://localhost:10000/") : console.log("attempt to create connection");
 
         //setting up property watchers
@@ -27,10 +25,10 @@ angular.module('PokerMain', [])
         $scope.MAX_TIME = 130;
 
         //number of players
-        $scope.players_amount = 0;
+        $scope.players_amount = undefined;
 
         //user's index
-        $scope.user_index = 0;
+        $scope.user_index = undefined;
 
         //card prototype
         $scope.card = {
@@ -71,14 +69,6 @@ angular.module('PokerMain', [])
 
         //------------------- cards on the center: flop, river, turn ---
         //values
-
-        //$scope.$watch('players_name[0]', function(newVal, oldVal){
-        //    if(newVal != oldVal){
-        //        $scope.players_name[0] = newVal;
-        //        $scope.is_players_visible[0] = true;
-        //    }
-        //
-        //});
 
 
         $scope.flop = [
@@ -121,8 +111,6 @@ angular.module('PokerMain', [])
         ];
 
         $scope.is_user_ready = false;
-
-        $scope.players_index_turn = 0;
 
         $scope.players_name = [
             '', '', '', '', '', ''
@@ -202,9 +190,14 @@ angular.module('PokerMain', [])
             }
         ];
 
-        $scope.user_remaining_time = [
+        $scope.user_remaining_time = '';
 
-        ];
+        $scope.$watch('user_turn', function(newVal, oldVal){
+            if(newVal === true && oldVal === false){
+                $scope.user_remaining_time = 120;
+                console.log($scope.user_remaining_time);
+            }
+        });
 
         $scope.user_contribution = '';
 
@@ -215,22 +208,17 @@ angular.module('PokerMain', [])
         };
 
         $scope.players_contribution = [
+            0,0,0,0,0,0
         ];
 
-        $scope.total_pot_value = '';
+        $scope.total_pot_value = 0;
 
         $scope.players_stack = [
         ];
 
-        $scope.players_bet = [
-        ];
-
-        $scope.players_turn = {
-
-        };
+        $scope.is_user_turn = false;
 
         $scope.is_players_ready = [
-
         ];
 
         $scope.user_bet = '';
@@ -313,14 +301,15 @@ angular.module('PokerMain', [])
 
         $scope.setLogin = function () {
             //connect and send initial login data package
-            if ($scope.user_login.length > 1 && $scope.user_login.length <= 10 && $scope.socket.readyState === 1){
+            if ($scope.user_login.length > 1 && $scope.user_login.length <= 10 && socket.readyState === 1){
                 $scope.sendResponse($scope.user_login);
                 $scope.is_logged = true;
+                $scope.ready.button_disabled = false;
             }
         };
 
         $scope.setTurn = function () {
-            $scope.is_user_turn == false ? $scope.is_user_turn = true : $scope.is_user_turn = false;
+            $scope.is_user_turn === false ? $scope.is_user_turn = true : $scope.is_user_turn = false;
         };
 
         $scope.setReady = function (){
@@ -338,14 +327,14 @@ angular.module('PokerMain', [])
         };
 
         $scope.setBet = function() {
-            if($scope.user_bet > 0 && $scope.user_bet < 9999  && $scope.socket.readyState === 1){
+            if($scope.user_bet > 0 && $scope.user_bet < 9999  && socket.readyState === 1){
                 $scope.sendResponse($scope.BET_COMMAND + " " + $scope.user_bet);
                 $scope.user_bet = '';
             }
         };
 
         $scope.setRaise = function() {
-            if($scope.user_bet.length > 0  && $scope.socket.readyState === 1) {
+            if($scope.user_bet.length > 0  && socket.readyState === 1) {
                 $scope.sendResponse($scope.RAISE_COMMAND + " " + $scope.user_bet);
                 $scope.user_bet = '';
             }
@@ -353,6 +342,8 @@ angular.module('PokerMain', [])
 
         $scope.setStand = function(){
             $scope.sendResponse($scope.LEAVE_COMMAND);
+            $scope.stand.button_disabled = true;
+            $scope.kickFromGame();
         };
 
         $scope.addChatEntry = function (){
@@ -492,7 +483,7 @@ angular.module('PokerMain', [])
                 //winning odds
                 $scope.user_odds.win = new_data.win;
                 $scope.user_odds.draw = new_data.draw;
-                $scope.user_odds.lose = new_data.lose;
+                $scope.user_odds.lose = new_data.loss;
 
                 //update the buttons
                 console.log("apply");
@@ -502,6 +493,11 @@ angular.module('PokerMain', [])
 
         };
 
+        $scope.kickFromGame = function(){
+            alert("You have been disconnected");
+            $scope.game_has_started = false;
+        };
+
 
         //----------------- server connection -------------------------
 
@@ -509,17 +505,16 @@ angular.module('PokerMain', [])
             content: ''
         };
 
-
-        $scope.socket.onopen = function(e) {
-            console.log("opened connection");
+        socket.onopen = function(e) {
+            console.log("open z wewnątrz");
         };
 
-        $scope.socket.onmessage = function(e) {
+        socket.onmessage = function(e) {
             console.log(e.data);
             $scope.update(JSON.parse(e.data));
         };
 
-        $scope.socket.onclose = function(e) {
+        socket.onclose = function(e) {
             console.log("closed");
         };
 
@@ -528,11 +523,11 @@ angular.module('PokerMain', [])
 
         $scope.sendResponse = function(key){
             //checking connection state
-            if($scope.socket.readyState === 1){
+            if(socket.readyState === 1){
                 $scope.message_server.content = key;
                 console.log(key);
-                $scope.socket.send(JSON.stringify($scope.message_server));
+                socket.send(JSON.stringify($scope.message_server));
             }
         };
 
-    });
+    }]);

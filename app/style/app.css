@@ -51,22 +51,16 @@ body{
 
 
 .players_data {
+  /*generated design*/
   background-color: #000000;
   -moz-border-radius: 50px;
   -webkit-border-radius: 50px;
   border-radius: 50px;
-  /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
   -moz-box-shadow: 0px 0px 19px #000000;
   -webkit-box-shadow: 0px 0px 19px #000000;
   box-shadow: 0px 0px 19px #000000;
-  /*IE 7 AND 8 DO NOT SUPPORT BLUR PROPERTY OF SHADOWS*/
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#0a0a0a', endColorstr = '#3d3d3d');
-  /*INNER ELEMENTS MUST NOT BREAK THIS ELEMENTS BOUNDARIES*/
-  /*Element must have a height (not auto)*/
-  /*All filters must be placed together*/
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr = '#0a0a0a', endColorstr = '#3d3d3d')";
-  /*Element must have a height (not auto)*/
-  /*All filters must be placed together*/
   background-image: -moz-linear-gradient(top, #0a0a0a, #3d3d3d);
   background-image: -ms-linear-gradient(top, #0a0a0a, #3d3d3d);
   background-image: -o-linear-gradient(top, #0a0a0a, #3d3d3d);
@@ -76,14 +70,9 @@ body{
   -moz-background-clip: padding;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
-  /*Use "background-clip: padding-box" when using rounded corners to avoid the gradient bleeding through the corners*/
-  /*--IE9 WILL PLACE THE FILTER ON TOP OF THE ROUNDED CORNERS--*/
   opacity: 0.99;
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity = 99);
-  /*-ms-filter must come before filter*/
   filter: alpha(opacity = 99);
-  /*INNER ELEMENTS MUST NOT BREAK THIS ELEMENTS BOUNDARIES*/
-  /*All filters must be placed together*/
 
   width:120px;
   height:40px;
@@ -98,22 +87,17 @@ body{
   width:100%;
 }
 
-.chips {
-}
-
 .card {
-  width:50px;
-  height:73px;
-  background-size: 100%;
-  background-repeat: no-repeat;
-
-  /*shadows added*/
+  /*generated design*/
   background-color: transparent;
   -moz-box-shadow: 0px 0px 20px #000000;
   -webkit-box-shadow: 0px 0px 20px #000000;
   box-shadow: 0px 0px 20px #000000;
-  /*IE 7 AND 8 DO NOT SUPPORT BLUR PROPERTY OF SHADOWS*/
 
+  width:50px;
+  height:73px;
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
 
 .players_cards {
@@ -270,23 +254,17 @@ body{
 }
 
 #hand_power_panel {
+  /*generated design*/
   background-color: #ffffff;
   border: 4px solid #999999;
   -moz-border-radius: 30px;
   -webkit-border-radius: 30px;
   border-radius: 30px;
-  /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
   -moz-box-shadow: 0px 0px 20px #000000;
   -webkit-box-shadow: 0px 0px 20px #000000;
   box-shadow: 0px 0px 20px #000000;
-  /*IE 7 AND 8 DO NOT SUPPORT BLUR PROPERTY OF SHADOWS*/
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#b8b8b8', endColorstr = '#000000');
-  /*INNER ELEMENTS MUST NOT BREAK THIS ELEMENTS BOUNDARIES*/
-  /*Element must have a height (not auto)*/
-  /*All filters must be placed together*/
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr = '#b8b8b8', endColorstr = '#000000')";
-  /*Element must have a height (not auto)*/
-  /*All filters must be placed together*/
   background-image: -moz-linear-gradient(top, #b8b8b8, #000000);
   background-image: -ms-linear-gradient(top, #b8b8b8, #000000);
   background-image: -o-linear-gradient(top, #b8b8b8, #000000);
@@ -296,14 +274,9 @@ body{
   -moz-background-clip: padding;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
-  /*Use "background-clip: padding-box" when using rounded corners to avoid the gradient bleeding through the corners*/
-  /*--IE9 WILL PLACE THE FILTER ON TOP OF THE ROUNDED CORNERS--*/
   opacity: 0.6;
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity = 45);
-  /*-ms-filter must come before filter*/
   filter: alpha(opacity = 45);
-  /*INNER ELEMENTS MUST NOT BREAK THIS ELEMENTS BOUNDARIES*/
-  /*All filters must be placed together*/
 
   text-align: center;
   position: absolute;
@@ -326,42 +299,32 @@ body{
 }
 
 .timer_normal {
+  /*generated design*/
   background-color: #25c219;
   -moz-border-radius: 37px;
   -webkit-border-radius: 37px;
   border-radius: 37px;
-  /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
   -moz-box-shadow: 0px 0px 20px #000000;
   -webkit-box-shadow: 0px 0px 20px #000000;
   box-shadow: 0px 0px 20px #000000;
-  /*IE 7 AND 8 DO NOT SUPPORT BLUR PROPERTY OF SHADOWS*/
   opacity: 0.85;
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity = 86);
-  /*-ms-filter must come before filter*/
   filter: alpha(opacity = 86);
-  /*INNER ELEMENTS MUST NOT BREAK THIS ELEMENTS BOUNDARIES*/
-  /*All filters must be placed together*/
 }
 
 
 #chat_and_game_history {
+  /*generated design*/
   background-color: #ffffff;
   border: 4px solid #999999;
   -moz-border-radius: 30px;
   -webkit-border-radius: 30px;
   border-radius: 30px;
-  /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
   -moz-box-shadow: 0px 0px 20px #000000;
   -webkit-box-shadow: 0px 0px 20px #000000;
   box-shadow: 0px 0px 20px #000000;
-  /*IE 7 AND 8 DO NOT SUPPORT BLUR PROPERTY OF SHADOWS*/
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#b8b8b8', endColorstr = '#000000');
-  /*INNER ELEMENTS MUST NOT BREAK THIS ELEMENTS BOUNDARIES*/
-  /*Element must have a height (not auto)*/
-  /*All filters must be placed together*/
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr = '#b8b8b8', endColorstr = '#000000')";
-  /*Element must have a height (not auto)*/
-  /*All filters must be placed together*/
   background-image: -moz-linear-gradient(top, #b8b8b8, #000000);
   background-image: -ms-linear-gradient(top, #b8b8b8, #000000);
   background-image: -o-linear-gradient(top, #b8b8b8, #000000);
@@ -371,20 +334,14 @@ body{
   -moz-background-clip: padding;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
-  /*Use "background-clip: padding-box" when using rounded corners to avoid the gradient bleeding through the corners*/
-  /*--IE9 WILL PLACE THE FILTER ON TOP OF THE ROUNDED CORNERS--*/
   opacity: 0.6;
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity = 45);
-  /*-ms-filter must come before filter*/
   filter: alpha(opacity = 45);
-  /*INNER ELEMENTS MUST NOT BREAK THIS ELEMENTS BOUNDARIES*/
-  /*All filters must be placed together*/
 
   position:absolute;
   width:450px;
   height: 700px;
   font-size: 15px;
-
   text-align: center;
   color: white;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
