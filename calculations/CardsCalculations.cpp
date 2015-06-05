@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdlib>
 #include <algorithm>
+#include <cmath>
 #include <boost/python.hpp>
 
 class Card
@@ -786,9 +787,9 @@ boost::python::list CalculateProbability(boost::python::list handCards, boost::p
     }
 
     boost::python::list probability;
-    probability.append((double)winCounter/(double)iter);
-    probability.append((double)tieCounter/(double)iter);
-    probability.append((double)loseCounter/(double)iter);
+    probability.append(round((double)winCounter/(double)iter));
+    probability.append(round((double)tieCounter/(double)iter));
+    probability.append(round((double)loseCounter/(double)iter));
 
     return probability;
 }
