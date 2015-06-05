@@ -88,8 +88,7 @@ class Game:
             self.visited_players += 1
             player = self.__get_player_with_turn()
 
-            timeout = 150.0
-            input_ready = player.get_ready_input_socket(timeout)
+            input_ready = player.get_ready_input_socket(self.table.TIMEOUT)
 
             if len(input_ready) == 0:
                 print 'Player ' + player.name + ' removed - waited too long.'

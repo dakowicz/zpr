@@ -7,6 +7,7 @@ import server
 
 
 class AcceptPlayer(threading.Thread):
+    TIMEOUT = 60
 
     def __init__(self, game, (socket, address)):
         threading.Thread.__init__(self)
@@ -22,8 +23,7 @@ class AcceptPlayer(threading.Thread):
         """
         try:
             websocket.handshake(self.socket)
-            timeout = 20.0
-            input_ready, output_ready, except_ready = select.select([self.socket], [], [], timeout)
+            input_ready, output_ready, except_ready = select.select([self.socket], [], [], self.TIMEOUT)
             if len(input_ready) == 0:
                 print 'Player is not accepted - waited too long'
                 return

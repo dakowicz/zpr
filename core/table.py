@@ -13,6 +13,7 @@ class Table(threading.Thread):
     """
     PLAYERS_LIMIT = 6
     PLAYERS_MINIMUM = 2
+    TIMEOUT = 150
 
     def __init__(self):
         threading.Thread.__init__(self)
@@ -45,7 +46,7 @@ class Table(threading.Thread):
                 self.controller.serve_event(player, message['content'])
 
             for player in self.players:
-                if not player.ready and player.arrival_time + 150 < time.time():
+                if not player.ready and player.arrival_time + self.TIMEOUT < time.time():
                     self.remove_player(player)
                     print 'Player ' + player.name + ' removed - waited too long.'
 
