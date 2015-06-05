@@ -1,3 +1,4 @@
+import struct
 import base64
 import hashlib
 
@@ -31,9 +32,25 @@ def parse_headers(data):
     return headers
 
 
+def send_data(client, data):
+    result = ""
+    result += chr(129)
+    length = len(data)
+    if length <= 125:
+        result += chr(length)
+    elif 126 <= length <= 65535:
+        result += chr(126)
+        result += str(struct.pack(">H", length))
+    else:
+        result += chr(127)
+        result += str(struct.pack(">Q", length))
+    result += data
+    client.send(result)
+
+
 def recv_data(client, size=1024):
     """
-        method decodes receive data from HTML WebSocket client
+        functions decodes receive data from HTML WebSocket client
         as a simple server, we expect to receive:
         - all data at one go and one frame
         - one frame at a time

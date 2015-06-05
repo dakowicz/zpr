@@ -140,6 +140,7 @@ class Table(threading.Thread):
         """
         dictionary = {
             'players_number': len(self.players),
+            'game_started': self.started,
         }
 
         i = 0
