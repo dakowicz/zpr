@@ -147,6 +147,10 @@ class Table(threading.Thread):
         dictionary = {
             'players_number': len(self.players),
             'game_started': self.started,
+            'index': self.players.index(player),
+            'win': player.win_probability,
+            'draw': player.draw_probability,
+            'loss': player.loss_probability,
         }
 
         i = 0
@@ -164,10 +168,6 @@ class Table(threading.Thread):
             if i < len(self.game.tableCards):
                 dictionary['table_card_' + str(i)] = str(self.game.tableCards[i])
             i += 1
-
-        dictionary['win'] = player.win_probability
-        dictionary['draw'] = player.draw_probability
-        dictionary['loss'] = player.loss_probability
 
         if self.game.dealer is not None:
             dictionary['dealer'] = self.players.index(self.game.dealer)
