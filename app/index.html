@@ -16,10 +16,7 @@
 </head>
     <body ng-controller = "PokerCtrl">
         <div id="poker_table" class="poker_table" data-uid="">
-            {{is_players_visible[0]}}
-            {{game_has_started}}
             <div ng-show = "is_players_visible[0]" id="seat1" class="seat">
-
                 <div class="players_cards">
                     <div ng-show = "game_has_started && is_card_visible[0]" class="card players_cards_first" ng-style="{'background-image': getImageLocation(players_cards[0].first_card.face, players_cards[0].first_card.suit)}"></div>
                     <div ng-show = "game_has_started && is_card_visible[0]" class="card players_cards_second" ng-style="{'background-image': getImageLocation(players_cards[0].second_card.face, players_cards[0].second_card.suit)}"></div>
@@ -123,15 +120,15 @@
             </div>
             <!-- blank spaces for board cards -->
             <div id="board">
-                    <div class="card boardspace"></div>
+                    <!--<div class="card boardspace"></div>-->
                     <div ng-show = "flop.is_visible" class="card boardcard" ng-style="{'background-image': getImageLocation(flop[0].face, flop[0].suit)}"></div>
-                    <div id="flop2" class="card boardspace"></div>
+                    <div ng-show = "flop.is_visible" id="flop2" class="card boardspace"></div>
                     <div ng-show = "flop.is_visible" id="flop2" class="card boardcard" ng-style="{'background-image': getImageLocation(flop[1].face, flop[1].suit)}"></div>
-                    <div id="flop3" class="card boardspace"></div>
+                    <div ng-show = "flop.is_visible"id="flop3" class="card boardspace"></div>
                     <div ng-show = "flop.is_visible" id="flop3" class="card boardcard" ng-style="{'background-image': getImageLocation(flop[2].face, flop[2].suit)}"></div>
-                    <div id="turn" class="card boardspace"></div>
+                    <div ng-show = "turn.is_visible" id="turn" class="card boardspace"></div>
                     <div ng-show = "turn.is_visible" id="turn" class="card boardcard" ng-style="{'background-image': getImageLocation(turn.face, turn.suit)}"></div>
-                    <div id="river" class="card boardspace"></div>
+                    <div ng-show = "river.is_visible" id="river" class="card boardspace"></div>
                     <div ng-show = "river.is_visible" id="river" class="card boardcard" ng-style="{'background-image': getImageLocation(river.face, river.suit)}"></div>
             </div>
 
@@ -159,7 +156,6 @@
                         <th >Time</th>
                     </tr>
                     </thead>
-
                     <tbody>
                     <tr ng-repeat="entry in chat_entries" >
                         <td>{{ entry.author }}</td>
