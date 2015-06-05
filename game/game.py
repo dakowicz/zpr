@@ -95,8 +95,12 @@ class Game:
                 print 'Player ' + player.name + ' removed - waited too long.'
                 controller.pressed_leave(self.table, player)
             else:
-                message = player.get_input()
-                self.table.controller.serve_event(player, message['content'])
+                try:
+                    message = player.get_input()
+                    self.table.controller.serve_event(player, message['content'])
+                except Exception as msg:
+                    print msg
+                    controller.pressed_leave(self.table, player)
 
         self.set_turn_after_auction()
 
