@@ -787,9 +787,9 @@ boost::python::list CalculateProbability(boost::python::list handCards, boost::p
     }
 
     boost::python::list probability;
-    probability.append(std::round((double)winCounter/(double)iter));
-    probability.append(std::round((double)tieCounter/(double)iter));
-    probability.append(std::round((double)loseCounter/(double)iter));
+    probability.append(floor((double)winCounter/(double)iter + 0.5));
+    probability.append(floor((double)tieCounter/(double)iter + 0.5));
+    probability.append(floor((double)loseCounter/(double)iter + 0.5));
 
     return probability;
 }
