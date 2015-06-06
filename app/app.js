@@ -199,9 +199,8 @@ angular.module('PokerMain', [])
         };
         $scope.setAllIn = function() {
                 //if player's stack is bigger than max on the table
-                console.log($scope.players_contribution[$scope.user_index] , $scope.players_stack[$scope.user_index] , $scope.getMax());
                 if($scope.checkIfCanBet()) {
-                    // -> send bet
+                    //send bet
                     $scope.user_bet = $scope.players_stack[$scope.user_index];
                     if ($scope.getMax() === $scope.players_contribution[$scope.user_index])
                         $scope.sendResponse($scope.BET_COMMAND + " " + $scope.user_bet);
@@ -237,7 +236,6 @@ angular.module('PokerMain', [])
         };
         //----------------- data update from server -------------------
         $scope.update = function (new_data){
-            console.log(new_data);
             $scope.$apply( function() {
                 //temp variables
                 var result = '';
@@ -377,8 +375,6 @@ angular.module('PokerMain', [])
                 $scope.game_has_started == true ? $scope.stand.button_disabled = false : $scope.stand.button_disabled = true;
                 $scope.max_contribution = $scope.getMax();
 
-                console.log(new_data.chat);
-
                 $scope.checkButtonsState();
 
                 //update chat
@@ -452,7 +448,6 @@ angular.module('PokerMain', [])
         $scope.sendResponse = function(key){
             //checking connection state
             if(socket.readyState === 1){
-                console.log(key);
                 $scope.message_server.content = key;
                 socket.send(JSON.stringify($scope.message_server));
             }
