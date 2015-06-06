@@ -198,20 +198,6 @@ angular.module('PokerMain', [])
                 $scope.user_bet = '';
             }
         };
-        $scope.setAllIn = function() {
-            //if if is before flop
-            $scope.user_bet = $scope.players_stack[$scope.user_index] +  $scope.players_contribution[$scope.user_index];
-
-            if($scope.bet.status === true && !$scope.flop.is_visible)
-                $scope.setRaise();
-            else if(!$scope.flop.is_visible)
-                $scope.setBet();
-            //after flop
-            else if($scope.flop.is_visible && $scope.max_contribution > $scope.players_contribution[$scope.user_index])
-                $scope.setRaise();
-            else
-                $scope.setBet();
-        };
         $scope.setStand = function(){
             $scope.sendResponse($scope.LEAVE_COMMAND);
             $scope.stand.button_disabled = true;
@@ -345,9 +331,9 @@ angular.module('PokerMain', [])
                     $scope.small_blind = -1;
                 }
                 //winning odds
-                $scope.user_odds.win = Math.round(new_data.win).toFixed(2);
-                $scope.user_odds.draw = Math.round(new_data.draw).toFixed(2);
-                $scope.user_odds.loss = Math.round(new_data.loss).toFixed(2);
+                $scope.user_odds.win = new_data.win.toFixed(2);
+                $scope.user_odds.draw = new_data.draw.toFixed(2);
+                $scope.user_odds.loss = new_data.loss.toFixed(2);
 
                 //update 'stand up' button state
                 $scope.game_has_started == true ? $scope.stand.button_disabled = false : $scope.stand.button_disabled = true;
@@ -371,16 +357,16 @@ angular.module('PokerMain', [])
                 $scope.raise.button_disabled = true;
                 $scope.call.button_disabled = true;
             }
-            else if($scope.flop.is_visible === true || $scope.bet.status === true){
-                $scope.bet.button_disabled = true;
+            else if($scope.flop.is_visible === true){
+                $scope.bet.button_disabled = false;
                 $scope.check.button_disabled = true;
-                $scope.raise.button_disabled = false;
+                $scope.raise.button_disabled = true;
                 $scope.call.button_disabled = false;
             }
             else{
                 $scope.bet.button_disabled = false;
                 $scope.check.button_disabled = true;
-                $scope.raise.button_disabled = true;
+                $scope.raise.button_disabled = false;
                 $scope.call.button_disabled = false;
             }
         };
@@ -411,6 +397,7 @@ angular.module('PokerMain', [])
         $scope.sendResponse = function(key){
             //checking connection state
             if(socket.readyState === 1){
+                console.log(key);
                 $scope.message_server.content = key;
                 socket.send(JSON.stringify($scope.message_server));
             }

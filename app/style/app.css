@@ -290,6 +290,7 @@ body{
   filter: alpha(opacity = 45);
 
   text-align: center;
+  font-size: 20px;
   position: absolute;
   color: white;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
@@ -297,29 +298,4 @@ body{
   top:600px;
   width: 400px;
   height: 100px;
-  font-size: 20px;
-}
-
-#game_timer {
-  position: absolute;
-  height:20px;
-  font-size: 14px;
-  text-align: center;
-  width:110px;
-  left:330px;
-  top:400px;
-}
-
-.timer_normal {
-  /*generated design*/
-  background-color: #25c219;
-  -moz-border-radius: 37px;
-  -webkit-border-radius: 37px;
-  border-radius: 37px;
-  -moz-box-shadow: 0px 0px 20px #000000;
-  -webkit-box-shadow: 0px 0px 20px #000000;
-  box-shadow: 0px 0px 20px #000000;
-  opacity: 0.85;
-  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity = 86);
-  filter: alpha(opacity = 86);
 }
