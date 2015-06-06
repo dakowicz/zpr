@@ -69,6 +69,7 @@ def pressed_bet(table, player, value):
     :param value: integer
     :return: nothing
     """
+    value = int(value)
     if not can_bet(table, player, value):
         pressed_leave(table, player)
         return
@@ -102,6 +103,7 @@ def pressed_raise(table, player, value):
     :param value: integer
     :return: nothing
     """
+    value = int(value)
     if not can_raise(table, player, value):
         pressed_leave(table, player)
         return
@@ -125,6 +127,17 @@ def pressed_fold(table, player):
     table.game.next_player_turn()
     if not table.game.is_auction_finished():
         table.notify_players()
+
+
+def got_message(table, player, message):
+    """
+        serves chat message
+    :param table: Table
+    :param player: Player
+    :return: nothing
+    """
+    table.notify_players(message)
+
 
 #
 # functions checking if action is available for player
@@ -230,13 +243,14 @@ class Controller:
             'call':  pressed_call,
             'raise': pressed_raise,
             'fold':  pressed_fold,
+            'chat':  got_message,
         }
 
     def serve_event(self, player, data):
         try:
-            if data.count(' ') == 1:
+            if data.count(' ') > 0:
                 action, argument = data.split(' ', 1)
-                self.event[action](self.table, player, int(argument))
+                self.event[action](self.table, player, argument)
             else:
                 self.event[data](self.table, player)
         except KeyError:

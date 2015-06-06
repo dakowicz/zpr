@@ -89,7 +89,7 @@ class Table(threading.Thread):
         else:
             raise Exception('No such player at the table.\n')
 
-    def notify_players(self):
+    def notify_players(self, message=None):
         """
             notify observers
             sends message to all players containing game state
@@ -99,7 +99,7 @@ class Table(threading.Thread):
         for player in self.players:
             try:
                 if not player.leaving:
-                    player.send(self.__dict(player))
+                    player.send(self.__dict(player, message))
             except socket.error:
                 controller.pressed_leave(self, player)
                 print 'Player ' + player.name + ' disconnected'
@@ -136,7 +136,7 @@ class Table(threading.Thread):
 
         return players_with_ready_input
 
-    def __dict(self, player):
+    def __dict(self, player, message):
         """
             method creates dictionary containing all information about game state, all players and given player cards
             keys: 'players_number', '0', '1', ... 'n' (depends on players number)
@@ -151,6 +151,7 @@ class Table(threading.Thread):
             'win': player.win_probability,
             'draw': player.draw_probability,
             'loss': player.loss_probability,
+            'chat': message,
         }
 
         i = 0
