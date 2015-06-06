@@ -353,9 +353,9 @@ angular.module('PokerMain', [])
                 //dealer's index
                 if (new_data.dealer != null) {
                     $scope.dealer = new_data.dealer;
-                    if ($scope.players_amount == 2) {
+                    if ($scope.players_amount === 2) {
                         $scope.big_blind = ($scope.dealer + 1) % ($scope.players_amount);
-                        $scope.small_blind = ($scope.dealer) % ($scope.players_amount);
+                        $scope.small_blind = ($scope.dealer);
                     }
                     else {
                         $scope.big_blind = ($scope.dealer + 2) % ($scope.players_amount);
@@ -366,10 +366,7 @@ angular.module('PokerMain', [])
                     $scope.big_blind = -1;
                     $scope.small_blind = -1;
                 }
-                if($scope.players_amount === 2){
-                    $scope.big_blind = ($scope.dealer + 1) % ($scope.players_amount);
-                    $scope.small_blind = $scope.dealer;
-                }
+
                 //winning odds
                 $scope.user_odds.win = new_data.win.toFixed(2);
                 $scope.user_odds.draw = new_data.draw.toFixed(2);
