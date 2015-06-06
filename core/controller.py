@@ -136,6 +136,7 @@ def got_message(table, player, message):
     :param player: Player
     :return: nothing
     """
+    table.game.visited_players -= 1
     table.notify_players(message)
 
 
