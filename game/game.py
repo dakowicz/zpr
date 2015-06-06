@@ -194,6 +194,7 @@ class Game:
         for player in self.table.players:
             if not player.fold:
                 player.visible = True
+        self.__reset_turn()
         self.table.notify_players()
         time.sleep(4)
         for player in self.table.players:
