@@ -114,11 +114,11 @@ angular.module('PokerMain', [])
         $scope.new_entry = '';
         $scope.addChatEntry = function () {
             //send to server
-            var time = new Date();
-            $scope.sendResponse($scope.CHAT_COMMAND + " " + $scope.user_login + "&" + $scope.new_entry + "&" + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
-            $scope.new_entry = '';
-            var textarea = document.getElementById('scrollable');
-            textarea.scrollTop = textarea.scrollHeight;
+            if($scope.new_entry){
+                var time = new Date();
+                $scope.sendResponse($scope.CHAT_COMMAND + " " + $scope.user_login + "&" + $scope.new_entry + "&" + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
+                $scope.new_entry = '';
+            }
         };
 
 
@@ -192,7 +192,7 @@ angular.module('PokerMain', [])
             $scope.sendResponse($scope.FOLD_COMMAND);
         };
         $scope.setBet = function() {
-            if($scope.checkIfCanBet() && Number($scope.user_bet) + $scope.players_contribution[$scope.user_index] > $scope.getMax() && Number($scope.user_bet) < $scope.players_stack[$scope.user_index]) {
+            if($scope.checkIfCanBet() && Number($scope.user_bet) < $scope.players_stack[$scope.user_index]) {
                 $scope.sendResponse($scope.BET_COMMAND + " " + $scope.user_bet);
                 $scope.user_bet = '';
             }
@@ -216,7 +216,7 @@ angular.module('PokerMain', [])
                 }
         };
         $scope.setRaise = function() {
-            if($scope.checkIfCanBet() && Number($scope.user_bet) + $scope.players_contribution[$scope.user_index] > $scope.getMax() && Number($scope.user_bet) < $scope.players_stack[$scope.user_index]) {
+            if($scope.checkIfCanBet() && Number($scope.user_bet) < $scope.players_stack[$scope.user_index]) {
 
                 $scope.sendResponse($scope.RAISE_COMMAND + " " + $scope.user_bet);
                 $scope.user_bet = '';
@@ -417,12 +417,13 @@ angular.module('PokerMain', [])
 
         $scope.updateChatEntries = function (val) {
                 var result = val.split("&");
-
                 $scope.chat_entries.push({
                     author: result[0],
                     string: result[1],
                     dt: result[2]
                 });
+            var textarea = document.getElementById('scrollable');
+            textarea.scrollTop = textarea.scrollHeight;
         };
 
         $scope.checkIfCanBet = function(){
