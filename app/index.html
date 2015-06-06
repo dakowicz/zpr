@@ -148,7 +148,7 @@
 
             <!-- block for chat and game history -->
             <div ng-show = "is_logged" id="chat_and_game_history">
-                <h3>Chat & Game History</h3>
+                <h3>Chat</h3>
 
                 <form class="form-horizontal" role="form" ng-submit = addChatEntry()>
                     <div class="form-group">
@@ -171,7 +171,7 @@
                         <tr ng-repeat="entry in chat_entries" >
                             <td>{{ entry.author }}</td>
                             <td>{{ entry.string }}</td>
-                            <td>{{entry.dt | date:'HH:mm:ss'}}</td>
+                            <td>{{ entry.dt }}</td>
                         </tr>
                         </tbody>
                     </table>
