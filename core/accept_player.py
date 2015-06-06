@@ -7,7 +7,7 @@ import server
 
 
 class AcceptPlayer(threading.Thread):
-    TIMEOUT = 60
+    TIMEOUT = 150
 
     def __init__(self, game, (socket, address)):
         threading.Thread.__init__(self)

@@ -57,7 +57,8 @@ def pressed_check(table, player):
         pressed_leave(table, player)
         return
     table.game.next_player_turn()
-    table.notify_players()
+    if not table.game.is_auction_finished():
+        table.notify_players()
 
 
 def pressed_bet(table, player, value):
@@ -73,7 +74,8 @@ def pressed_bet(table, player, value):
         return
     player.add_to_pot(value)
     table.game.next_player_turn()
-    table.notify_players()
+    if not table.game.is_auction_finished():
+        table.notify_players()
 
 
 def pressed_call(table, player):
@@ -88,7 +90,8 @@ def pressed_call(table, player):
         return
     player.add_to_pot(table.game.max_contribution() - player.contribution)
     table.game.next_player_turn()
-    table.notify_players()
+    if not table.game.is_auction_finished():
+        table.notify_players()
 
 
 def pressed_raise(table, player, value):
@@ -104,7 +107,8 @@ def pressed_raise(table, player, value):
         return
     player.add_to_pot(table.game.max_contribution() - player.contribution + value)
     table.game.next_player_turn()
-    table.notify_players()
+    if not table.game.is_auction_finished():
+        table.notify_players()
 
 
 def pressed_fold(table, player):
@@ -119,7 +123,8 @@ def pressed_fold(table, player):
     player.fold = True
     table.game.visited_players -= 1
     table.game.next_player_turn()
-    table.notify_players()
+    if not table.game.is_auction_finished():
+        table.notify_players()
 
 #
 # functions checking if action is available for player

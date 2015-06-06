@@ -1,3 +1,4 @@
+import time
 import calculations.pokerCalculations
 import core.controller as controller
 from deck import Deck
@@ -194,6 +195,7 @@ class Game:
             if not player.fold:
                 player.visible = True
         self.table.notify_players()
+        time.sleep(4)
         for player in self.table.players:
             player.visible = False
 
