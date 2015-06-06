@@ -120,7 +120,6 @@
             </div>
             <!-- blank spaces for board cards -->
             <div id="board">
-                    <!--<div class="card boardspace"></div>-->
                     <div ng-show = "flop.is_visible" class="card boardcard" ng-style="{'background-image': getImageLocation(flop[0].face, flop[0].suit)}"></div>
                     <div ng-show = "flop.is_visible" id="flop2" class="card boardspace"></div>
                     <div ng-show = "flop.is_visible" id="flop2" class="card boardcard" ng-style="{'background-image': getImageLocation(flop[1].face, flop[1].suit)}"></div>
@@ -146,7 +145,7 @@
                 <input type="text"  ng-model="user_bet"  placeholder = "Type your new contribution" ng-minlength="1" ng-maxlength="4">
                 <button ng-disabled = "bet.button_disabled" ng-click = "setBet()" class="btn btn-warning">Bet</button>
                 <button ng-disabled = "raise.button_disabled" ng-click = "setRaise()" class="btn btn-warning">Raise</button>
-                <!--<button ng-disabled = "allin.button_disabled" ng-click = "setAllIn()" class="btn btn-danger">All in</button>-->
+                <button ng-disabled = "allin.button_disabled" ng-click = "setAllIn()" class="btn btn-danger">All in</button>
             </div>
             <div ng-show = "!is_logged">
                 <input type="text"  ng-model="user_login"  placeholder = "Type your login (max 10 chars)" >
