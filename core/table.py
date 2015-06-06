@@ -13,7 +13,7 @@ class Table(threading.Thread):
     """
     PLAYERS_LIMIT = 6
     PLAYERS_MINIMUM = 2
-    TIMEOUT = 500
+    TIMEOUT = 2000
 
     def __init__(self):
         threading.Thread.__init__(self)
