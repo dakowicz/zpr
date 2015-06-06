@@ -357,12 +357,6 @@ angular.module('PokerMain', [])
                 $scope.raise.button_disabled = true;
                 $scope.call.button_disabled = true;
             }
-            else if($scope.flop.is_visible === true){
-                $scope.bet.button_disabled = false;
-                $scope.check.button_disabled = true;
-                $scope.raise.button_disabled = true;
-                $scope.call.button_disabled = false;
-            }
             else{
                 $scope.bet.button_disabled = false;
                 $scope.check.button_disabled = true;
