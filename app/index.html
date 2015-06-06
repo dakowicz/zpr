@@ -4,12 +4,14 @@
     <title>Poker Online</title>
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css">
     <link rel="stylesheet" href="style/app.css">
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- .js for components-->
     <script src="http://code.angularjs.org/1.3.15/angular.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://rawgithub.com/alalonde/angular-scrollable-table/master/angular-scrollable-table.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
     <script src="app.js"></script>
 
 </head>
@@ -135,23 +137,22 @@
                     <div ng-show = "flop.is_visible" class="card boardcard" ng-style="{'background-image': getImageLocation(flop[0].face, flop[0].suit)}"></div>
                     <div ng-show = "flop.is_visible" id="flop2" class="card boardspace"></div>
                     <div ng-show = "flop.is_visible" id="flop2" class="card boardcard" ng-style="{'background-image': getImageLocation(flop[1].face, flop[1].suit)}"></div>
-                    <div ng-show = "flop.is_visible"id="flop3" class="card boardspace"></div>
+                    <div ng-show = "flop.is_visible" id="flop3" class="card boardspace"></div>
                     <div ng-show = "flop.is_visible" id="flop3" class="card boardcard" ng-style="{'background-image': getImageLocation(flop[2].face, flop[2].suit)}"></div>
                     <div ng-show = "turn.is_visible" id="turn" class="card boardspace"></div>
                     <div ng-show = "turn.is_visible" id="turn" class="card boardcard" ng-style="{'background-image': getImageLocation(turn.face, turn.suit)}"></div>
                     <div ng-show = "river.is_visible" id="river" class="card boardspace"></div>
                     <div ng-show = "river.is_visible" id="river" class="card boardcard" ng-style="{'background-image': getImageLocation(river.face, river.suit)}"></div>
             </div>
-
             <div ng-show = "total_pot_value" id="pot"  >Total pot: ${{total_pot_value}}</div>
-            <!--<div ng-show = "is_user_turn" id="game_timer" class="timer_normal">Time: {{user_remaining_time}}</div>-->
+
             <!-- block for chat and game history -->
             <div ng-show = "is_logged" id="chat_and_game_history">
                 <h3>Chat & Game History</h3>
 
                 <form class="form-horizontal" role="form" ng-submit = addChatEntry()>
                     <div class="form-group">
-                        <input type="text" class="form-control" ng-model="new_entry" placeholder="Send a message (max 25 chars)" ng-maxlength="25">
+                        <input type="text" class="form-control" ng-model="new_entry" placeholder="Send a message (max 25 chars)" ng-maxlength="25" ng-minlength="1">
                         <input type="submit" value="Submit" class="btn btn-primary"/>
                     </div>
                 </form>
@@ -165,6 +166,7 @@
                             <th >Time</th>
                         </tr>
                         </thead>
+
                         <tbody>
                         <tr ng-repeat="entry in chat_entries" >
                             <td>{{ entry.author }}</td>
