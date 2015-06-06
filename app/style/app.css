@@ -160,7 +160,7 @@ body{
 }
 
 .bet {
-  font-size: 12px;
+  font-size: 16px;
   color:white;
   position: absolute;
   left:0;
@@ -220,7 +220,7 @@ body{
   left:150px;
   top:10px;
 }
-
+nt
 #seat6 .bet {
   left:80px;
   top:125px;
@@ -236,7 +236,7 @@ body{
   position: absolute;
   left:340px;
   top:280px;
-  font-size: 12px;
+  font-size: 16px;
   color: white;
   width: auto;
 }
