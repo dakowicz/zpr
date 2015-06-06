@@ -120,6 +120,17 @@ body{
   left: 25px;
 }
 
+#players_ready{
+  background-color: red;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  -moz-box-shadow: 0px 0px 20px red;
+  -webkit-box-shadow: 0px 0px 20px  red;
+  box-shadow: 0px 0px 20px  red;
+  left: 25px;
+}
+
 .players_cards_first {
   position:absolute;
   left:0;
