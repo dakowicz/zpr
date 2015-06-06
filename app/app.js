@@ -68,7 +68,7 @@ angular.module('PokerMain', [])
         $scope.is_card_visible = [
             false, false, false, false, false, false
         ];
-
+        $scope.max_contribution = -1;
         $scope.dealer = -1;
         $scope.big_blind = -1;
         $scope.small_blind = -1;
@@ -194,6 +194,7 @@ angular.module('PokerMain', [])
                 $scope.user_bet -= $scope.getMax();
                 $scope.sendResponse($scope.BET_COMMAND + " " + $scope.user_bet);
                 $scope.user_bet = '';
+                $scope.bet.status = true;
             }
         };
 
@@ -286,13 +287,14 @@ angular.module('PokerMain', [])
                         $scope.user_index = Number(new_data.index);
 
                         //checking if it is user's turn
-                        if ($scope.players_turn[$scope.user_index] === true)
+                        if ($scope.players_turn[$scope.user_index] === true && $scope.is_user_turn === false){
                             $scope.is_user_turn = true;
-                        else
+                            $scope.bet.status = false;
+                        }
+                        else if($scope.players_turn[$scope.user_index] === false && $scope.is_user_turn === true)
                             $scope.is_user_turn = false;
                     }
                 }
-
                 //game status
                 $scope.game_has_started = new_data.gamestarted;
 
@@ -354,12 +356,33 @@ angular.module('PokerMain', [])
 
                 //update 'stand up' button state
                 $scope.game_has_started == true ? $scope.stand.button_disabled = false : $scope.stand.button_disabled = true;
+                $scope.max_contribution = $scope.getMax();
 
-                //update 'bet' button state
-                if($scope.getMax() > $scope.players_contribution[$scope.user_index])
+                //update playing buttons states
+                if($scope.players_stack[$scope.user_index] < $scope.max_contribution - $scope.players_contribution[$scope.user_index]){
                     $scope.bet.button_disabled = true;
-                else
+                    $scope.check.button_disabled = true;
+                    $scope.raise.button_disabled = true;
+                    $scope.call.button_disabled = true;
+                }
+                else if($scope.max_contribution === $scope.players_contribution[$scope.user_index]) {
                     $scope.bet.button_disabled = false;
+                    $scope.check.button_disabled = false;
+                    $scope.raise.button_disabled = true;
+                    $scope.call.button_disabled = true;
+                }
+                else if($scope.flop.is_visible === true || $scope.bet.status === true){
+                    $scope.bet.button_disabled = true;
+                    $scope.check.button_disabled = true;
+                    $scope.raise.button_disabled = false;
+                    $scope.call.button_disabled = false;
+                }
+                else{
+                    $scope.bet.button_disabled = false;
+                    $scope.check.button_disabled = true;
+                    $scope.raise.button_disabled = true;
+                    $scope.call.button_disabled = false;
+                }
             })
         };
         //stops game after wrong input
