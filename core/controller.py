@@ -161,10 +161,12 @@ def can_bet(table, player, value):
     :param player: Player
     :return: boolean
     """
-    if not can_check(table, player) or player.chips < value:
+    if not can_check(table, player):
         return False
-    elif player.chips == value:
+    elif value == player.chips:
         return True
+    elif player.chips < value:
+        return False
     else:
         return True
 
@@ -191,10 +193,10 @@ def can_raise(table, player, value):
     """
     if not table.started or not player.turn or player.fold:
         return False
+    elif value == player.chips:
+        return True
     elif table.game.max_contribution() - player.contribution + value > player.chips:
         return False
-    elif table.game.max_contribution() - player.contribution + value == player.chips:
-        return True
     else:
         return True
 
