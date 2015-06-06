@@ -10,7 +10,6 @@
     <script src="http://code.angularjs.org/1.3.15/angular.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script src="https://rawgithub.com/alalonde/angular-scrollable-table/master/angular-scrollable-table.js"></script>
     <script src="app.js"></script>
 
 </head>
@@ -134,40 +133,7 @@
             </div>
 
             <div ng-show = "total_pot_value" id="pot"  >Total pot: ${{total_pot_value}}</div>
-
-            <div ng-show = "is_user_turn" id="game_timer" class="timer_normal">Time: {{user_remaining_time}}</div>
-
-        <!-- block for chat and game history -->
-        <div ng-show = "is_logged" id="chat_and_game_history">
-            <h3>Chat & Game History</h3>
-
-                <form class="form-horizontal" role="form" ng-submit = addChatEntry()>
-                    <div class="form-group">
-                        <input type="text" class="form-control" ng-model="new_entry" placeholder="Send a message (max 25 chars)" ng-maxlength="25">
-                        <input type="submit" value="Submit" class="btn btn-primary"/>
-                    </div>
-                </form>
-
-            <div id="scrollable">
-                <table class="table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th >User</th>
-                        <th >Msg</th>
-                        <th >Time</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="entry in chat_entries" >
-                        <td>{{ entry.author }}</td>
-                        <td>{{ entry.string }}</td>
-                        <td>{{entry.dt | date:'HH:mm:ss'}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
+            <!--<div ng-show = "is_user_turn" id="game_timer" class="timer_normal">Time: {{user_remaining_time}}</div>-->
         <!-- buttons for user options during the game -->
         <div id="action_options">
             <button ng-disabled = "stand.button_disabled" ng-click = setStand() class="btn btn-danger">Stand up</button>
@@ -177,19 +143,15 @@
             <button ng-show = "is_user_turn && game_has_started" ng-disabled = "check.button_disabled" ng-click = setCheck() class="btn btn-success" >Check</button>
 
             <div ng-show = "is_user_turn">
-                <input type="text"  ng-model="user_bet"  placeholder = "Type your bet/raise here" ng-minlength="1" ng-maxlength="4">
-                <button ng-click = "setBet()" class="btn btn-warning">Bet</button>
-                <button ng-click = "setRaise()" class="btn btn-warning">Raise</button>
+                <input type="text"  ng-model="user_bet"  placeholder = "Type your new contribution" ng-minlength="1" ng-maxlength="4">
+                <button ng-disabled = "bet.button_disabled" ng-click = "setBet()" class="btn btn-warning">Bet</button>
+                <button ng-disabled = "raise.button_disabled" ng-click = "setRaise()" class="btn btn-warning">Raise</button>
             </div>
-
-
             <div ng-show = "!is_logged">
                 <input type="text"  ng-model="user_login"  placeholder = "Type your login (max 10 chars)" >
                 <button ng-click = "setLogin()" class="btn btn-primary">Login</button>
             </div>
-
         </div>
-
         <div ng-show = "game_has_started" id="hand_power_panel">
             <label><input type="checkbox" ng-model = "is_hand_power_visible" >Player's winning odds</label>
             <div ng-show = "is_hand_power_visible">

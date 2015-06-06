@@ -144,17 +144,17 @@ angular.module('PokerMain', [])
             status: false
         };
         $scope.bet = {
-            button_disabled: true,
+            button_disabled: false,
             status: false
         };
         $scope.login = {
             button_disabled: false,
             status: false
         };
-
-        $scope.chat_entries = [];
-        $scope.entry = '';
-        $scope.new_entry = '';
+        $scope.all_in = {
+            button_disabled: false,
+            status: false
+        };
 
         //--------------------buttons' click effect--------------------
 
@@ -166,61 +166,56 @@ angular.module('PokerMain', [])
                 $scope.ready.button_disabled = false;
             }
         };
-
         $scope.setTurn = function () {
             $scope.is_user_turn === false ? $scope.is_user_turn = true : $scope.is_user_turn = false;
         };
-
         $scope.setReady = function (){
             $scope.is_user_ready = true;
             $scope.sendResponse($scope.READY_COMMAND);
         };
-
         $scope.setCheck = function (){
             $scope.sendResponse($scope.CHECK_COMMAND);
         };
-
         $scope.setCall = function (){
             $scope.user_contribution = $scope.getMax();
             $scope.sendResponse($scope.CALL_COMMAND);
         };
-
         $scope.setFold = function(){
             $scope.sendResponse($scope.FOLD_COMMAND);
         };
-
         $scope.setBet = function() {
-            if($scope.user_bet > 0  && socket.readyState === 1 && $scope.user_bet > $scope.getMax()){
+            if($scope.user_bet > 0 && $scope.user_bet > $scope.getMax()){
                 $scope.user_bet -= $scope.getMax();
                 $scope.sendResponse($scope.BET_COMMAND + " " + $scope.user_bet);
                 $scope.user_bet = '';
                 $scope.bet.status = true;
             }
         };
-
         $scope.setRaise = function() {
-            if($scope.user_bet.length > 0  && socket.readyState === 1 && $scope.user_bet > $scope.getMax()) {
+            if($scope.user_bet.length > 0 && $scope.user_bet > $scope.getMax()) {
                 $scope.user_bet -= $scope.getMax();
                 $scope.sendResponse($scope.RAISE_COMMAND + " " + $scope.user_bet);
                 $scope.user_bet = '';
             }
         };
+        $scope.setAllIn = function() {
+            //if if is before flop
+            $scope.user_bet = $scope.players_stack[$scope.user_index] +  $scope.players_contribution[$scope.user_index];
 
+            if($scope.bet.status === true && !$scope.flop.is_visible)
+                $scope.setRaise();
+            else if(!$scope.flop.is_visible)
+                $scope.setBet();
+            //after flop
+            else if($scope.flop.is_visible && $scope.max_contribution > $scope.players_contribution[$scope.user_index])
+                $scope.setRaise();
+            else
+                $scope.setBet();
+        };
         $scope.setStand = function(){
             $scope.sendResponse($scope.LEAVE_COMMAND);
             $scope.stand.button_disabled = true;
             $scope.kickFromGame();
-        };
-
-        $scope.addChatEntry = function (){
-            if($scope.new_entry !== ''  && $scope.new_entry !== undefined) {
-                $scope.chat_entries.push({
-                    string: $scope.new_entry,
-                    author: $scope.user_login,
-                    dt: new Date()
-                });
-                $scope.new_entry = '';
-            }
         };
 
         //----------------- data update from server -------------------
@@ -358,33 +353,38 @@ angular.module('PokerMain', [])
                 $scope.game_has_started == true ? $scope.stand.button_disabled = false : $scope.stand.button_disabled = true;
                 $scope.max_contribution = $scope.getMax();
 
-                //update playing buttons states
-                if($scope.players_stack[$scope.user_index] < $scope.max_contribution - $scope.players_contribution[$scope.user_index]){
-                    $scope.bet.button_disabled = true;
-                    $scope.check.button_disabled = true;
-                    $scope.raise.button_disabled = true;
-                    $scope.call.button_disabled = true;
-                }
-                else if($scope.max_contribution === $scope.players_contribution[$scope.user_index]) {
-                    $scope.bet.button_disabled = false;
-                    $scope.check.button_disabled = false;
-                    $scope.raise.button_disabled = true;
-                    $scope.call.button_disabled = true;
-                }
-                else if($scope.flop.is_visible === true || $scope.bet.status === true){
-                    $scope.bet.button_disabled = true;
-                    $scope.check.button_disabled = true;
-                    $scope.raise.button_disabled = false;
-                    $scope.call.button_disabled = false;
-                }
-                else{
-                    $scope.bet.button_disabled = false;
-                    $scope.check.button_disabled = true;
-                    $scope.raise.button_disabled = true;
-                    $scope.call.button_disabled = false;
-                }
+                $scope.checkButtonsState();
             })
         };
+
+            //update playing buttons states
+        $scope.checkButtonsState = function(){
+            if($scope.players_stack[$scope.user_index] < $scope.max_contribution - $scope.players_contribution[$scope.user_index]){
+                $scope.bet.button_disabled = true;
+                $scope.check.button_disabled = true;
+                $scope.raise.button_disabled = true;
+                $scope.call.button_disabled = true;
+            }
+            else if($scope.max_contribution === $scope.players_contribution[$scope.user_index]) {
+                $scope.bet.button_disabled = false;
+                $scope.check.button_disabled = false;
+                $scope.raise.button_disabled = true;
+                $scope.call.button_disabled = true;
+            }
+            else if($scope.flop.is_visible === true || $scope.bet.status === true){
+                $scope.bet.button_disabled = true;
+                $scope.check.button_disabled = true;
+                $scope.raise.button_disabled = false;
+                $scope.call.button_disabled = false;
+            }
+            else{
+                $scope.bet.button_disabled = false;
+                $scope.check.button_disabled = true;
+                $scope.raise.button_disabled = true;
+                $scope.call.button_disabled = false;
+            }
+        };
+
         //stops game after wrong input
         $scope.kickFromGame = function(){
             console.log("You have been disconnected");
