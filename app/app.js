@@ -107,6 +107,20 @@ angular.module('PokerMain', [])
         $scope.is_players_folded = [];
         $scope.is_players_ready = [];
         $scope.total_pot_value = 0;
+        
+        $scope.chat_entries = [];
+        $scope.entry = '';
+        $scope.new_entry = '';
+        $scope.addChatEntry = function (){
+            if($scope.new_entry !== ''  && $scope.new_entry !== undefined) {
+                $scope.chat_entries.push({
+                    string: $scope.new_entry,
+                    author: $scope.user_login,
+                    dt: new Date()
+                });
+                $scope.new_entry = '';
+            }
+        };
 
         //------------------- buttons ---------------------------------
         $scope.sit = {
@@ -266,7 +280,7 @@ angular.module('PokerMain', [])
                         result[counter++].toLowerCase() == 'true' ? $scope.players_turn[i] = true : $scope.players_turn[i] = false;
 
                         //players' leaving state
-                        result[counter++].toLowerCase() == 'true' ? $scope.is_card_visible[i] = false : $scope.is_card_visible[i] = true;
+                        result[counter++].toLowerCase() == 'true' ? $scope.is_players_folded[i] = true : $scope.is_players_folded[i] = false;
 
                         //players' stacks
                         $scope.players_stack[i] = Number(result[counter++]);
