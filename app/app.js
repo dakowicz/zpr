@@ -46,7 +46,7 @@ angular.module('PokerMain', [])
             return Array.max( $scope.players_contribution );
         };
 
-        //------------------- cards on the center: flop, river, turn ---
+        //------------------- cards on the center: flop, river, turn --
         //initial values of board cards
         $scope.flop = [
             {face: 'back', suit: 'card'},
@@ -59,39 +59,40 @@ angular.module('PokerMain', [])
         $scope.river = {face: 'back', suit: 'card'};
         $scope.river.is_visible = false;
 
-        //------------------- players ----------------------------------
-        //number of players
-        $scope.players_amount = undefined;
+        //------------------- user ------------------------------------
+        $scope.is_user_ready = false;
+        $scope.user_index = undefined;
+        $scope.user_remaining_time = '';
+        $scope.user_contribution = '';
+        $scope.user_login = '';
+        $scope.user_bet = '';
+        $scope.is_user_turn = false;
+        $scope.is_logged = false;
+        $scope.is_hand_power_visible = false;
+        $scope.user_odds = {
+            win: '',
+            draw: '',
+            loss: ''
+        };
+
+        //------------------- players ---------------------------------
+        //filled with initial values
+        $scope.players_amount = -1;
+        $scope.max_contribution = -1;
+        $scope.dealer = -1;
+        $scope.big_blind = -1;
+        $scope.small_blind = -1;
+        $scope.game_has_started = false;
         $scope.is_players_visible = [
             false, false, false, false, false, false
         ];
         $scope.is_card_visible = [
             false, false, false, false, false, false
         ];
-        $scope.max_contribution = -1;
-        $scope.dealer = -1;
-        $scope.big_blind = -1;
-        $scope.small_blind = -1;
-        $scope.game_has_started = false;
-        $scope.is_hand_power_visible = false;
         $scope.players_turn = [
             false, false, false, false, false, false
         ];
-        $scope.is_user_ready = false;
-        $scope.user_index = undefined;
-        $scope.user_remaining_time = '';
-        $scope.user_contribution = '';
-        $scope.user_odds = {
-            win: '',
-            draw: '',
-            loss: ''
-        };
-        $scope.is_user_turn = false;
-        $scope.user_bet = '';
-        $scope.is_logged = false;
-        $scope.user_login = '';
         $scope.players_name = [];
-
         //initial values
         $scope.players_cards = [
             {first_card: {face: 'back',suit: 'card'}, second_card: {face: 'back', suit: 'card'}},
@@ -101,13 +102,6 @@ angular.module('PokerMain', [])
             {first_card: {face: 'back',suit: 'card'}, second_card: {face: 'back', suit: 'card'}},
             {first_card: {face: 'back',suit: 'card'}, second_card: {face: 'back', suit: 'card'}}
         ];
-
-        $scope.$watch('user_turn', function(newVal, oldVal){
-            if(newVal === true && oldVal === false){
-                $scope.user_remaining_time = 120;
-                console.log($scope.user_remaining_time);
-            }
-        });
         $scope.players_contribution = [];
         $scope.players_stack = [];
         $scope.is_players_folded = [];
@@ -188,7 +182,6 @@ angular.module('PokerMain', [])
                 $scope.user_bet -= $scope.getMax();
                 $scope.sendResponse($scope.BET_COMMAND + " " + $scope.user_bet);
                 $scope.user_bet = '';
-                $scope.bet.status = true;
             }
         };
         $scope.setRaise = function() {
@@ -203,13 +196,14 @@ angular.module('PokerMain', [])
             $scope.stand.button_disabled = true;
             $scope.kickFromGame();
         };
+        $scope.setAllin = function(){
+            $scope.user_bet = $scope.players_contribution[$scope.user_index] + $scope.players_stack[$scope.user_index];
+            $scope.user_bet -= $scope.getMax();
+        };
 
         //----------------- data update from server -------------------
         $scope.update = function (new_data){
             $scope.$apply( function() {
-
-                console.log(new_data);
-
                 //temp variables
                 var result = '';
                 var counter = 0;
@@ -270,14 +264,14 @@ angular.module('PokerMain', [])
                         //checking if it is user's turn
                         if ($scope.players_turn[$scope.user_index] === true && $scope.is_user_turn === false){
                             $scope.is_user_turn = true;
-                            $scope.bet.status = false;
                         }
                         else if($scope.players_turn[$scope.user_index] === false && $scope.is_user_turn === true)
                             $scope.is_user_turn = false;
                     }
                 }
                 //game status
-                $scope.game_has_started = new_data.gamestarted;
+                !new_data.gamestarted && $scope.game_has_started ? $scope.kickFromGame() :
+                new_data.gamestarted && !$scope.game_has_started ? $scope.game_has_started = true : $scope.game_has_started = new_data.gamestarted;
 
                 //board cards
                 if (new_data.tablecard0 == "None") {
@@ -367,8 +361,8 @@ angular.module('PokerMain', [])
 
         //stops game after wrong input
         $scope.kickFromGame = function(){
-            console.log("You have been disconnected");
-            $scope.game_has_started = false;
+            socket.close();
+            alert("You have been disconnected");
         };
 
         //----------------- server connection -------------------------
@@ -377,13 +371,11 @@ angular.module('PokerMain', [])
             content: ''
         };
         socket.onopen = function(e) {
-            console.log("connection is open");
         };
         socket.onmessage = function(e) {
             $scope.update(JSON.parse(e.data));
         };
         socket.onclose = function(e) {
-            console.log("connection is closed");
             alert("You have been disconnected");
         };
 
@@ -391,7 +383,6 @@ angular.module('PokerMain', [])
         $scope.sendResponse = function(key){
             //checking connection state
             if(socket.readyState === 1){
-                console.log(key);
                 $scope.message_server.content = key;
                 socket.send(JSON.stringify($scope.message_server));
             }

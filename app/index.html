@@ -146,6 +146,7 @@
                 <input type="text"  ng-model="user_bet"  placeholder = "Type your new contribution" ng-minlength="1" ng-maxlength="4">
                 <button ng-disabled = "bet.button_disabled" ng-click = "setBet()" class="btn btn-warning">Bet</button>
                 <button ng-disabled = "raise.button_disabled" ng-click = "setRaise()" class="btn btn-warning">Raise</button>
+                <!--<button ng-disabled = "allin.button_disabled" ng-click = "setAllIn()" class="btn btn-danger">All in</button>-->
             </div>
             <div ng-show = "!is_logged">
                 <input type="text"  ng-model="user_login"  placeholder = "Type your login (max 10 chars)" >
