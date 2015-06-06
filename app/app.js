@@ -117,6 +117,8 @@ angular.module('PokerMain', [])
             var time = new Date();
             $scope.sendResponse($scope.CHAT_COMMAND + " " + $scope.user_login + "&" + $scope.new_entry + "&" + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
             $scope.new_entry = '';
+            var textarea = document.getElementById('scrollable');
+            textarea.scrollTop = textarea.scrollHeight;
         };
 
 
