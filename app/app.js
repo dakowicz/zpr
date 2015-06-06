@@ -109,9 +109,10 @@ angular.module('PokerMain', [])
             }
         });
         $scope.players_contribution = [];
-        $scope.total_pot_value = 0;
         $scope.players_stack = [];
+        $scope.is_players_folded = [];
         $scope.is_players_ready = [];
+        $scope.total_pot_value = 0;
 
         //------------------- buttons ---------------------------------
         $scope.sit = {
@@ -268,9 +269,8 @@ angular.module('PokerMain', [])
                         //players' turn
                         result[counter++].toLowerCase() == 'true' ? $scope.players_turn[i] = true : $scope.players_turn[i] = false;
 
-                        //players' leaving states TO DO //////////////////////////////
-                        if(result[counter++].toLowerCase() == 'true')
-                            $scope.kickFromGame();
+                        //players' leaving state
+                        result[counter++].toLowerCase() == 'true' ? $scope.is_card_visible[i] = false : $scope.is_card_visible[i] = true;
 
                         //players' stacks
                         $scope.players_stack[i] = Number(result[counter++]);
@@ -348,9 +348,9 @@ angular.module('PokerMain', [])
                     $scope.small_blind = -1;
                 }
                 //winning odds
-                $scope.user_odds.win = Math.round(new_data.win).toFixed(1);
-                $scope.user_odds.draw = Math.round(new_data.draw).toFixed(1);
-                $scope.user_odds.loss = Math.round(new_data.loss).toFixed(1);
+                $scope.user_odds.win = Math.round(new_data.win).toFixed(2);
+                $scope.user_odds.draw = Math.round(new_data.draw).toFixed(2);
+                $scope.user_odds.loss = Math.round(new_data.loss).toFixed(2);
 
                 //update 'stand up' button state
                 $scope.game_has_started == true ? $scope.stand.button_disabled = false : $scope.stand.button_disabled = true;
@@ -381,6 +381,7 @@ angular.module('PokerMain', [])
         };
         socket.onclose = function(e) {
             console.log("connection is closed");
+            alert("You have been disconnected");
         };
 
         //----------------- response to server ------------------------
