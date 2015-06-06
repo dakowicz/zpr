@@ -23,8 +23,8 @@ angular.module('PokerMain', [])
         $scope.LEAVE_COMMAND = 'leave';
         $scope.CHECK_COMMAND = 'check';
 
-        //max time for user's action
-        $scope.MAX_TIME = 130;
+        //max players
+        $scope.MAX_PLAYERS = 6;
 
         //card prototype
         $scope.card = {
@@ -184,8 +184,8 @@ angular.module('PokerMain', [])
             }
         };
         $scope.setAllIn = function() {
-            if($scope.user_bet.length > 0) {
                 //if player's stack is bigger than max on the table
+                console.log($scope.players_contribution[$scope.user_index] , $scope.players_stack[$scope.user_index] , $scope.getMax());
                 if($scope.checkIfCanBet()) {
                     // -> send bet
                     $scope.user_bet = $scope.players_stack[$scope.user_index];
@@ -194,12 +194,12 @@ angular.module('PokerMain', [])
                     else
                         $scope.sendResponse($scope.RAISE_COMMAND + " " + $scope.user_bet);
                     $scope.user_bet = '';
-                }}
+                }
                 //send call
                 else {
                     $scope.sendResponse($scope.CALL_COMMAND);
                     $scope.user_bet = '';
-            }
+                }
         };
         $scope.setRaise = function() {
             if($scope.checkIfCanBet() && $scope.user_bet + $scope.players_contribution[$scope.user_index] > $scope.getMax() && $scope.user_bet + $scope.players_contribution[$scope.user_index] <= $scope.players_stack[$scope.user_index]) {
@@ -209,7 +209,15 @@ angular.module('PokerMain', [])
         };
         $scope.setStand = function(){
             $scope.sendResponse($scope.LEAVE_COMMAND);
+            //set all of the button disabled
             $scope.stand.button_disabled = true;
+            $scope.call.button_disabled = true;
+            $scope.ready.button_disabled = true;
+            $scope.bet.button_disabled = true;
+            $scope.raise.button_disabled = true;
+            $scope.allin.button_disabled = true;
+            $scope.fold.button_disabled = true;
+            $scope.check.button_disabled = true;
             $scope.kickFromGame();
         };
         //----------------- data update from server -------------------
@@ -227,7 +235,7 @@ angular.module('PokerMain', [])
                 $scope.total_pot_value = 0;
 
                 //updating players' attributes
-                for (var i = 0; i < $scope.players_amount; ++i) {
+                for (var i = 0; i < $scope.MAX_PLAYERS; ++i) {
                     if (new_data[i]) {
                         result = new_data[i].split(" ");
                         counter = 0;
@@ -359,7 +367,7 @@ angular.module('PokerMain', [])
                 $scope.raise.button_disabled = true;
                 $scope.call.button_disabled = true;
             }
-            else if($scope.getMax() > $scope.players_contribution[$scope.user_index]) {
+            else if($scope.getMax() > $scope.players_contribution[$scope.user_index] && $scope.players_stack[$scope.user_index] + $scope.players_contribution[$scope.user_index] >= $scope.getMax()) {
                 $scope.bet.button_disabled = true;
                 $scope.check.button_disabled = true;
                 $scope.raise.button_disabled = false;

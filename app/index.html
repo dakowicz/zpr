@@ -140,7 +140,7 @@
             <div ng-show = "total_pot_value" id="pot"  >Total pot: ${{total_pot_value}}</div>
             <!--<div ng-show = "is_user_turn" id="game_timer" class="timer_normal">Time: {{user_remaining_time}}</div>-->
         <!-- buttons for user options during the game -->
-        <div id="action_options">
+        <div id="action_options" >
             <button ng-disabled = "stand.button_disabled" ng-click = setStand() class="btn btn-danger">Stand up</button>
             <button ng-show = "is_logged && !is_user_ready" ng-disabled = "ready.button_disabled" ng-click = setReady() class="btn btn-primary">Ready</button>
             <button ng-show = "is_user_turn && game_has_started" ng-disabled = "fold.button_disabled" ng-click = setFold() class="btn btn-primary">Fold</button>
